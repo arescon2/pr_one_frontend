@@ -1,0 +1,39 @@
+/* variables */
+:root {
+  /* colors */
+  --primary-color: #f44336;
+  --primary-color-dark: color(#f44336 shade(12%));
+  --primary-color-tint: color(#f44336 tint(70%));
+  --secondary-color: #222;
+  --secodnary-color-dark: color(#222 shade(12%));
+  --secondary-color-tint: color(#222 tint(70%));
+  
+  /* width */
+  --form-width: 16rem;
+}
+.bkg-login {
+  color: #fff;
+  background: #222;
+  font-family: "Open Sans", sans-serif;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+}
+
+.login-form-block {
+  width: var(--form-width);
+  margin: 5rem auto 0 auto;
+  .title {
+    color: white;
+  }
+  .row-login-block {
+    margin-bottom: 5px;
+  }
+  .error-block {
+    border-left: solid 4px rgb(171 24 0 / 77%);
+    color: #7e7e7e;
+    padding: 5px 20px;
+    background: rgb(133 88 81 / 15%);
+  }
+}

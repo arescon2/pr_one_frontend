@@ -1,19 +1,3 @@
-## Description
 
-[Vite](https://vitejs.dev/) Front web-client framework vite.js repository.
-
-## Installation
-
-```bash
-$ npm init vite@latest
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run dev
-
-# production mode
-$ npm run build
-```
+####
+My project needs React 17 as it has multiple app root elements, so I updated ./node_modules/@blueprintjs/core.package.json directly with "react": "^15.3.0 || 16 || 17" and everything seems to be working well so far.
