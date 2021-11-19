@@ -9,10 +9,15 @@ import { Select } from '@blueprintjs/select';
 
 import './style.scss';
 
+function DataPathParser (str) {
+  console.log(str.splice('.'))
+}
+
 const Generator = ({
   config = [],
   data,
-  updData
+  updData,
+  el_data
 }) => {
 
   const navigate = useNavigate();
@@ -26,7 +31,12 @@ const Generator = ({
 
     el_conf.classes ? params.className = el_conf.classes : null
 
-    const child_render = <Generator config={el_conf.child || []} data={data} updData={updData} />;
+    const child_render = <Generator
+      config={el_conf.child || []}
+      data={data}
+      el_data={el_data}
+      updData={updData}
+    />;
 
     return {
       Row: <Row className={el_conf.classes} {...params}>{child_render}</Row>,
@@ -59,14 +69,16 @@ const Generator = ({
     let disable = el_conf.disable || false;
 
     const handleClick = () => {
-      el_conf.linkto ? navigate(el_conf.linkto) : null;
+      el_conf.linkto ? navigate(_data[el_conf.linkto]) : null;
     }
 
+    let _data = el_data || false;
+
     let b = <Button
-      text={el_conf.text || ''}
-      type={el_conf.type || 'button'}
-      intent={el_conf.intent || 'none'}
-      icon={el_conf.icon || null}
+      text={(_data ? _data[el_conf.text] : el_conf.text) || ''}
+      type={el_conf[el_conf.type] || 'button'}
+      intent={(_data ? _data[el_conf.text] : el_conf.intent) || 'none' }
+      icon={(_data ? _data[el_conf.icon] : el_conf.icon) || null}
       small={el_conf.size == 'small'}
       large={el_conf.size == 'large'}
       disabled={disable}
@@ -76,8 +88,8 @@ const Generator = ({
 
     if(el_conf.placeholder) {
       b = <Tooltip2
-        content={el_conf.placeholder}
-        placement={el_conf.placeholder_position}
+        content={(_data ? _data[el_conf.placeholder] : el_conf.placeholder) || '' }
+        placement={(_data ? _data[el_conf.position] : el_conf.position) || 'auto'}
       >{b}</Tooltip2>
     }
 
@@ -96,6 +108,18 @@ const Generator = ({
   //   />
   // }
 
+  const GCollection = ({ el_conf }) => {
+    return data[el_conf.data].map((el) => {
+      return <Generator
+        key={nanoid()}
+        config={el_conf.child || []}
+        data={data}
+        el_data={el}
+        updData={updData}
+      />
+    })
+  }
+
   // switcher components
   
   const GSwitcher = ({ el_conf }) => {
@@ -103,6 +127,7 @@ const Generator = ({
       block: <GBlock el_conf={el_conf} />,
       input: <GInput el_conf={el_conf} />,
       button: <GButton el_conf={el_conf} />,
+      collection: <GCollection el_conf={el_conf} />,
       // select: <GSelect el_conf={el_conf} />
     }[el_conf.element] || <> Компонент {el_conf.element} недоступен </>
   };

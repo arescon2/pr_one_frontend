@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,9 +10,9 @@ import Login from '../pages/login';
 import LoadingPage from '../features/loadingPage';
 
 import Main from './main';
-import NotFound from '../views/404';
+import NotFound from './views/404';
 
-import PageView from '../views/page';
+import PageView from './views/page';
 
 import { getTokens } from '../libs';
 

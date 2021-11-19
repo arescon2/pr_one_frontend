@@ -28,12 +28,16 @@ const Header = () => {
     dispatch(setLogined(false));
     navigate('/login');
   }
+  
+  const handleAdd = () => {
+    navigate('/page/new_ticket');
+  }
 
   return (
     <Navbar className='header-block'>
       <Navbar.Group align={Alignment.LEFT}>
         <Navbar.Heading>
-          <Button minimal icon='plus' />
+          <Button minimal icon='plus' onClick={handleAdd} />
         </Navbar.Heading>
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>

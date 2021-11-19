@@ -25,7 +25,15 @@ const LeftBlock = () => {
     menu: [
       {
         id: 1,
-
+        icon: 'home',
+        placeholder: 'Главная страница',
+        linkto: '/'
+      },
+      {
+        id: 2,
+        icon: 'form',
+        placeholder: 'Тикеты',
+        linkto: '/page/tickets'
       }
     ]
   }
@@ -38,45 +46,29 @@ const LeftBlock = () => {
       classes: 'left-menu-wrapper',
       child: [
         {
-          id: 2,
-          element: 'block',
-          type: 'Col',
-          classes: 'centered-child',
+          element: 'collection',
+          data: 'menu',
           child: [
             {
-              id: 50,
-              element: 'button',
-              type: 'button',
-              classes: '',
-              size: 'large',
-              icon: 'home',
-              fill: false,
-              minimal: true,
-              disable: false,
-              linkto: '/',
-              placeholder: 'Главная страница'
-            }
-          ]
-        },
-        {
-          id: 3,
-          element: 'block',
-          type: 'Col',
-          classes: 'centered-child',
-          child: [
-            {
-              id: 51,
-              element: 'button',
-              type: 'button',
-              classes: '',
-              size: 'large',
-              icon: 'form',
-              minimal: true,
-              disable: false,
-              linkto: '/page/tickets',
-              placeholder: 'Тикеты',
-              placeholder_position: 'right'
-            }
+              element: 'block',
+              type: 'Col',
+              classes: 'centered-child',
+              child: [
+                {
+                  id: 'id',
+                  element: 'button',
+                  type: 'button',
+                  classes: '',
+                  size: 'large',
+                  icon: 'icon',
+                  fill: false,
+                  minimal: true,
+                  disable: false,
+                  linkto: 'linkto',
+                  placeholder: 'placeholder'
+                }
+              ]
+            },
           ]
         }
       ]
