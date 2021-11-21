@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './style.scss';
 import Generator from '../../../features/generator';
 
+
 let json = {
   new_ticket: [
     {
@@ -105,17 +106,81 @@ let json = {
         }
       ]
     }
-  ]
-}
+  ],
+  settings: [
+    {
+      id: 1,
+      element: 'block',
+      type: 'Row',
+      classes: '',
+      child: [
+        {
+          id: 1,
+          element: 'block',
+          type: 'Col',
+          md: 12,
+          classes: '',
+          styles: '',
+          child: [
+            {
+              id: 2,
+              element: 'tabs',
+              classes: '',
+              large: false,
+              data: 'menu',
+              title: 'text'
+            },
+          ]
+        }
+      ]
+    }
+  ],
+};
 
-const Page = ({ config }) => {
-  const { data, setData } = useState({});
+let menu = [
+  {
+    id: 1,
+    text: 'Views',
+    placeholder: 'Views',
+    linkto: '/page/views',
+    key: 'views',
+    config: 'views_admin'
+  },
+  {
+    id: 2,
+    text: 'Тикеты',
+    placeholder: 'Тикеты',
+    linkto: '/page/tickets',
+    key: 'tickets'
+  },
+  {
+    id: 3,
+    text: 'Настройки asdasd asd asda sd asd',
+    placeholder: 'Настройки ',
+    linkto: '/page/settings',
+    key: 'settings'
+  }
+]
 
-  return <Generator
+const Page = ({ params, loading }) => {
+  const [ data, setData ] = useState({});
+  const [ ready, setReady ] = useState(false);
+  const [ config, setConfig ] = useState({});
+
+  useEffect(() => {
+    if(loading && !ready) {
+      let _data = {...data, menu}
+      setData(_data);
+      setConfig(json[params.pagename])
+      setReady(true);
+    }
+  }, [loading, ready])
+  
+  return ready ? <Generator
     config={config}
     data={data}
     updData={setData}
-  />;
+  /> : null
 }
 
 export default Page;

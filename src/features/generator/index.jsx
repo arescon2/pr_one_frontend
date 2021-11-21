@@ -1,6 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import {
+  useNavigate, useParams,
+  useLocation, useSearchParams
+} from 'react-router-dom';
 
-import { InputGroup, FormGroup, Button } from '@blueprintjs/core';
+import {
+  Classes, InputGroup, FormGroup,
+  Button, Menu, MenuDivider, MenuItem,
+  Tabs, Tab
+} from '@blueprintjs/core';
+
 import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import { Container, Row, Col } from 'react-grid-system';
 
@@ -21,6 +30,8 @@ const Generator = ({
 }) => {
 
   const navigate = useNavigate();
+
+  let _data = el_data || false;
 
   const GBlock = ({ el_conf }) => {
     let params = {};
@@ -56,13 +67,22 @@ const Generator = ({
       // binding data
     } else params.defaultValue = el_conf.value;
 
-    return {
+    let b = {
       Text: <InputGroup
         className={el_conf.classes}
         disabled={disable}
         {...params}
       />,
-    }[el_conf.type]
+    }[el_conf.type];
+
+    if(el_conf.placeholder) {
+      b = <Tooltip2
+        fill={true}
+        content={(_data ? _data[el_conf.placeholder] : el_conf.placeholder) || '' }
+        placement={(_data ? _data[el_conf.position] : el_conf.position) || 'auto'}
+      >{b}</Tooltip2>
+    }
+    return b;
   };
 
   const GButton = ({ el_conf }) => {
@@ -72,10 +92,8 @@ const Generator = ({
       el_conf.linkto ? navigate(_data[el_conf.linkto]) : null;
     }
 
-    let _data = el_data || false;
-
     let b = <Button
-      text={(_data ? _data[el_conf.text] : el_conf.text) || ''}
+      text={(_data ? _data[el_conf.text] || _data['text'] : el_conf.text) || ''}
       type={el_conf[el_conf.type] || 'button'}
       intent={(_data ? _data[el_conf.text] : el_conf.intent) || 'none' }
       icon={(_data ? _data[el_conf.icon] : el_conf.icon) || null}
@@ -83,6 +101,7 @@ const Generator = ({
       large={el_conf.size == 'large'}
       disabled={disable}
       minimal={el_conf.minimal || false}
+      fill={el_conf.fill || false}
       onClick={handleClick}
     />
 
@@ -109,7 +128,8 @@ const Generator = ({
   // }
 
   const GCollection = ({ el_conf }) => {
-    return data[el_conf.data].map((el) => {
+    let _data = data[el_conf.data] || []
+    return _data.map((el) => {
       return <Generator
         key={nanoid()}
         config={el_conf.child || []}
@@ -118,7 +138,112 @@ const Generator = ({
         updData={updData}
       />
     })
-  }
+  };
+
+  const GMenu = ({ el_conf }) => {
+    let _data = data[el_conf.data] || []
+    return <Menu className={Classes.ELEVATION_1}>
+      {
+        _data.map( el => {
+          return <MenuItem
+            key={nanoid()}
+            icon={el.icon || null}
+            text={el.text || null}
+          />
+        })
+      }
+    </Menu>
+  };
+
+  const GTabs = ({ el_conf }) => {
+    let _data = data[el_conf.data] || [];
+    let [searchParams, setSearchParams] = useSearchParams();
+    let [loading, setLoading] = useState();
+    let [config, setConfig] = useState();
+
+    const location = useLocation();
+    const curTab = searchParams.get("tab");
+
+    const handleNavbarTabChange = (navbarTabId) => {
+      if (!searchParams.get("tab"))
+        searchParams.append("tab", navbarTabId);
+      else {
+        let a = Array.from(searchParams)
+        a.forEach( el => {
+          el[0] === 'tab' ? el[1] = navbarTabId : null;
+          return el;
+        });
+        
+        searchParams = new URLSearchParams(a)
+      }
+      
+      navigate(`${location.pathname}?${searchParams}`)
+    };
+
+    let json = {
+      views_admin: [
+        {
+          id: 1,
+          element: 'block',
+          type: 'Row',
+          classes: 'fill',
+          child: [
+            {
+              id: 2,
+              element: 'block',
+              type: 'Col',
+              md: 12,
+              classes: '',
+              child: [
+                {
+                  element: 'collection',
+                  data: 'menu',
+                  child: [
+                  ]
+                }
+              ]
+            },
+          ]
+        }
+      ]
+    };
+
+    const getConfig = (el) => {
+      return json[el.config];
+    };
+
+    return <Tabs
+      id={nanoid()}
+      className='fill'
+      animate={el_conf.animate || false}
+      key={el_conf.vertical ? "vertical" : "horizontal"}
+      selectedTabId={curTab ? curTab : _data[0].key}
+      vertical={el_conf.vertical ? "vertical" : "horizontal"}
+      onChange={handleNavbarTabChange}
+    >
+      {
+        _data.map( el => {
+          return <Tab
+            key={nanoid()}
+            id={el.key}
+            title={el.text || ''}
+            panel={
+              <>
+                { el_conf.title ? <Col md={12}><h3 className='bp3-heading'>
+                  { el[el_conf.title] || '' }
+                </h3></Col> : null }
+                <Generator
+                  config={getConfig(el)|| []}
+                  el_data={el_data}
+                  data={data}
+                  updData={updData}
+                />
+              </>
+            } />
+        })
+      }
+    </Tabs>
+  };
 
   // switcher components
   
@@ -128,6 +253,8 @@ const Generator = ({
       input: <GInput el_conf={el_conf} />,
       button: <GButton el_conf={el_conf} />,
       collection: <GCollection el_conf={el_conf} />,
+      menu: <GMenu el_conf={el_conf} />,
+      tabs: <GTabs el_conf={el_conf} />,
       // select: <GSelect el_conf={el_conf} />
     }[el_conf.element] || <> Компонент {el_conf.element} недоступен </>
   };
