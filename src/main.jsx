@@ -1,19 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 
-import App from './pages/App'
+import App from './pages/App';
 
-import { store } from './stores'
-import { Provider } from 'react-redux'
+import { store } from './stores';
+import { Provider } from 'react-redux';
 
-import './styles/index.scss'
+import './styles/index.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
         <App />
+        <ToastContainer theme='dark' />
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

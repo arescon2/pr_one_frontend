@@ -155,7 +155,7 @@ let menu = [
   },
   {
     id: 3,
-    text: 'Настройки asdasd asd asda sd asd',
+    text: 'Настройки asdasd asd asda sd asd фывфыв фыв фывфы вв ',
     placeholder: 'Настройки ',
     linkto: '/page/settings',
     key: 'settings'

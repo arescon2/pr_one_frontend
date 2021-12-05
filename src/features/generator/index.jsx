@@ -17,6 +17,7 @@ import { nanoid } from 'nanoid';
 import { Select } from '@blueprintjs/select';
 
 import './style.scss';
+import Creator from './creator';
 
 function DataPathParser (str) {
   console.log(str.splice('.'))
@@ -26,7 +27,7 @@ const Generator = ({
   config = [],
   data,
   updData,
-  el_data
+  el_data,
 }) => {
 
   const navigate = useNavigate();
@@ -196,10 +197,8 @@ const Generator = ({
               classes: '',
               child: [
                 {
-                  element: 'collection',
-                  data: 'menu',
-                  child: [
-                  ]
+                  element: 'creator',
+                  config: 'views_add',
                 }
               ]
             },
@@ -214,7 +213,7 @@ const Generator = ({
 
     return <Tabs
       id={nanoid()}
-      className='fill'
+      className='fill generator-tab'
       animate={el_conf.animate || false}
       key={el_conf.vertical ? "vertical" : "horizontal"}
       selectedTabId={curTab ? curTab : _data[0].key}
@@ -230,7 +229,7 @@ const Generator = ({
             panel={
               <>
                 { el_conf.title ? <Col md={12}><h3 className='bp3-heading'>
-                  { el[el_conf.title] || '' }
+                  { el[el_conf.title] + ' - ' + el.config || '' }
                 </h3></Col> : null }
                 <Generator
                   config={getConfig(el)|| []}
@@ -245,6 +244,10 @@ const Generator = ({
     </Tabs>
   };
 
+  const GCreator = ({ el_conf }) => {
+    return <Creator config_name={el_conf.config} />
+  };
+
   // switcher components
   
   const GSwitcher = ({ el_conf }) => {
@@ -255,6 +258,7 @@ const Generator = ({
       collection: <GCollection el_conf={el_conf} />,
       menu: <GMenu el_conf={el_conf} />,
       tabs: <GTabs el_conf={el_conf} />,
+      creator: <GCreator el_conf={el_conf} />,
       // select: <GSelect el_conf={el_conf} />
     }[el_conf.element] || <> Компонент {el_conf.element} недоступен </>
   };
