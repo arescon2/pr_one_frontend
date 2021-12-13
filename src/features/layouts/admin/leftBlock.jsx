@@ -1,6 +1,11 @@
+import { useDispatch } from 'react-redux';
 import Generator from '../../generator';
 
+import { setPageTitle } from '../../stores/mainSlice';
+
 const LeftBlock = () => {
+  const dispatch = useDispatch();
+
   let data = {
     menu: [
       {
@@ -19,7 +24,7 @@ const LeftBlock = () => {
         id: 3,
         icon: 'cog',
         placeholder: 'Настройки',
-        linkto: '/page/settings'
+        linkto: '/settings'
       }
     ]
   }
@@ -51,7 +56,7 @@ const LeftBlock = () => {
                   minimal: true,
                   disable: false,
                   linkto: 'linkto',
-                  placeholder: 'placeholder'
+                  placeholder: 'placeholder',
                 }
               ]
             },
@@ -65,7 +70,6 @@ const LeftBlock = () => {
     <Generator
       config={json}
       data={data}
-      // updData={(new_data) => setData(new_data)}
     />
   </div>
 }

@@ -15,6 +15,14 @@ import NotFound from './views/404';
 import PageView from './views/page';
 
 import { getTokens } from '../libs';
+import UserPage from './user';
+import UserMain from './user/main';
+import UserSettings from './user/settings';
+import Registration from './login/signup';
+
+
+// settings
+import SettingsPage from './settings';
 
 const App = (props) => {
   const navigate = useNavigate();
@@ -29,7 +37,7 @@ const App = (props) => {
 
     // logined
     dispatch(setLogined(true));
-    if(location.pathname === '/login') navigate('/');
+    if(['/login', '/registration'].findIndex(el => el === location.pathname) > -1) navigate('/');
     
     // not logined
     // dispatch(setLogined(false));
@@ -45,6 +53,12 @@ const App = (props) => {
       logined ? <AdminLayout>
           <Routes>
             <Route path="/" element={<Main />} />
+            <Route path="/user-cabinet" element={<UserPage /> }>
+              <Route path="settings" element={<UserSettings /> } />
+            </Route>
+            <Route path="/settings" element={<SettingsPage/>}>
+              <Route path="views" />
+            </Route>
             <Route path="/page/:pagename" element={<PageView />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -52,6 +66,7 @@ const App = (props) => {
         :
         <Routes>          
           <Route path="login" element={<Login />} />
+          <Route path="registration" element={<Registration />} />
         </Routes>
     }
   </>

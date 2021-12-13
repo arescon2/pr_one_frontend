@@ -1,9 +1,13 @@
 import { useCallback, useState } from "react";
 
-const useLoading = (initialState) => {
+export const useLoading = (initialState) => {
   const [isLoading, setIsLoading] = useState(initialState);
   const toggleLoading = useCallback((status) => setIsLoading(status));
   return [isLoading, toggleLoading];
 };
 
-export default useLoading;
+export const usePayback = (initialState) => {
+  const [isStatusPayback, setPayback] = useState(initialState);
+  const setStatusPayback = useCallback((status) => setPayback(status));
+  return [isStatusPayback, setStatusPayback];
+}

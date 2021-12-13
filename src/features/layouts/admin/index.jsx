@@ -13,7 +13,7 @@ const Home = (props) => {
   return [
     <Helmet key={nanoid()}>
       <meta charSet="utf-8" />
-      <title>Journal</title>
+      <title>AllTum.Журнал</title>
       {/* <link rel="canonical" href="http://mysite.com/example" /> */}
     </Helmet>,
     <LeftBlock key={nanoid()} />,

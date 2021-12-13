@@ -9,7 +9,8 @@ import {
   MenuItem,
   Position,
   Alignment,
-  Navbar
+  Navbar,
+  H6
 } from "@blueprintjs/core";
 
 import {
@@ -21,6 +22,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLogined, setLoading } from '../stores/mainSlice';
 
 const Header = () => {
+  const { pageTitle } = useSelector((state) => state.main);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,7 +40,7 @@ const Header = () => {
     <Navbar className='header-block'>
       <Navbar.Group align={Alignment.LEFT}>
         <Navbar.Heading>
-          <Button minimal icon='plus' onClick={handleAdd} />
+          <H6>{pageTitle}</H6>
         </Navbar.Heading>
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>

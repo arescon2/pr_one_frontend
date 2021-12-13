@@ -14,26 +14,21 @@ import {
   H3
 } from "@blueprintjs/core";
 
-const Login = () => {
+const Registration = () => {
   const navigate = useNavigate();
-  const { logined, loadingGlobal } = useSelector((state) => state.main);
   
   const { login, setLogin } = useState('');
   const { password, setPassword } = useState('');
   const { errors, setErrors } = useState([]);
-  
+
   const handlerEnter = (ev) => {
     ev.keycode === 13 ? handlerGo() : null;
   };
-
+  
   const handlerGo = () => {
     alert('go');
     navigate('/');
   };
-
-  useEffect(() => {
-    logined ? navigate('/') : null;
-  }, [])
 
   return [
     <div className='bkg-login'></div>,
@@ -44,19 +39,19 @@ const Login = () => {
             <Card>
               <Row className='row-login-title'>
                 <Col md={12}>
-                  <H3>Авторизация в системе</H3>
-                  <span>или <Link to='/registration'>зарегистрируйтесь </Link></span>
+                  <H3>Регистрация в системе</H3>
+                  <span>или <Link to='/login'>авторизуйтесь</Link></span>
                   
                 </Col>
               </Row>
               <Row className='row-login-block'>
                 <Col>
                   <FormGroup
-                    label="Логин"
-                    labelFor="login"
+                    label="Email"
+                    labelFor="email"
                   >
                     <InputGroup
-                      id='login'
+                      id='email'
                       onChange={(ev) => {
                         console.log(ev)
                         // setLogin
@@ -71,7 +66,7 @@ const Login = () => {
               <Row className='row-login-block'>
                 <Col>
                   <FormGroup
-                    label="Пароль"
+                    label="Придумайте пароль"
                     labelFor="password"
                   >
                     <InputGroup
@@ -94,12 +89,12 @@ const Login = () => {
                     alignText='center'
                     intent='success'
                     fill={true}
-                  >Авторизоваться</Button>
+                  >Зарегистрироваться</Button>
                 </Col>
               </Row>
               <Row className='row-login-forgot'>
                 <Col>
-                  <a link>Забыли пароль?</a>
+                  --
                 </Col>
               </Row>
             </Card>
@@ -110,5 +105,4 @@ const Login = () => {
   ]
 }
 
-export default Login
-  
+export default Registration;

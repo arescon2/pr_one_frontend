@@ -26,6 +26,6 @@ export const mainSlice = createSlice({
   }
 })
 
-export const { setMainMenu, setLogined, setLoading } = mainSlice.actions
+export const { setMainMenu, setLogined, setLoading, setPageTitle } = mainSlice.actions
 
 export default mainSlice.reducer
