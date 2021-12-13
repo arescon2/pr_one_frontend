@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Container, Row, Col } from 'react-grid-system';
-import { Card, Elevation, H3, H4, H5, Icon } from '@blueprintjs/core';
+import { Card, Divider, Elevation, H3, H4, H5, Icon } from '@blueprintjs/core';
 import { useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 
@@ -13,6 +13,17 @@ import './styles.scss';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const appTypes = [
+  {
+    type: 'journal',
+    title: 'Расписание и журнал'
+  }, 
+  {
+    type: 'sklad',
+    title: 'Склад'
+  }
+];
 
 const apps = [
   {
@@ -49,13 +60,6 @@ const MainPage = () => {
     getApps();
   }, []);
 
-  const appName = (type) => {
-    return {
-      journal: 'Расписание, журнал - ',
-      sklad: 'Склад - '
-    }[type]
-  };
-
   const appAccessCalc = (date) => {
     const formatedDate = DateTime.fromISO(date);
     const now = DateTime.now();
@@ -84,31 +88,35 @@ const MainPage = () => {
 
   return (
     <Container fluid>
-      <Row>
-        <Col md={12}>
-          <H4>Ваши приложения</H4>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={12}>
-          {
-            appList.map(el => {
-              let [textAccesses, colorAccesses] = appAccessCalc(el.access);
+      {
+        appTypes.map(appType => {
+          return <Row key={nanoid()} style={{
+            marginBottom: '30px'
+          }}>
+            <Col md={12}>
+              <H3>{appType.title}</H3>
+            </Col>
+            <Col md={12}>
+              {
+                appList.filter(el => el.type === appType.type).map(el => {
+                  let [textAccesses, colorAccesses] = appAccessCalc(el.access);
 
-              return <Card
-                key={nanoid()}
-                className={`item-apps ${el.type} ${colorAccesses}`}
-                interactive={true}
-                elevation={Elevation.TWO}
-                onClick={() => handlerToApp(el.type, el.id)}
-              >
-                <H5>{appName(el.type)} {el.title}</H5>
-                {textAccesses}
-              </Card>
-            })
-          }
-        </Col>
-      </Row>
+                  return <Card
+                    key={nanoid()}
+                    className={`item-apps ${el.type} ${colorAccesses}`}
+                    interactive={true}
+                    elevation={Elevation.TWO}
+                    onClick={() => handlerToApp(el.type, el.id)}
+                  >
+                    <H5>{el.title}</H5>
+                    {textAccesses}
+                  </Card>
+                })
+              }
+            </Col>
+          </Row>
+        })
+      }
     </Container>
   )
 }
