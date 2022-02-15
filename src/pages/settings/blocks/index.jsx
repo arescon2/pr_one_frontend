@@ -53,11 +53,13 @@ const Blocks = () => {
       id: 1,
       name: 'views_form',
       created: '08.02.2022',
+      config: []
     },
     {
       id: 2,
       name: 'asdasd',
       created: '08.02.2022',
+      config: []
     },
   ];
 

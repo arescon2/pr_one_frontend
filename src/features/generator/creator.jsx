@@ -1,27 +1,13 @@
-import { createRef, useEffect, useState } from 'react';
-import {
-  useNavigate, useParams,
-  useLocation, useSearchParams
-} from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-// import { Container, Row, Col } from 'react-grid-system';
-
-// import {
-//   Classes, InputGroup, FormGroup,
-//   Button, Menu, MenuDivider, MenuItem,
-//   Tabs, Tab, Dialog, H5, Position,
-//   Classes as CoreClasses,
-//   Divider,
-// } from '@blueprintjs/core';
-
-// import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
-// import { Select } from '@blueprintjs/select';
+import { Row, Col, Button, Modal, Popconfirm, Divider, Input } from 'antd';
 
 import { toast } from 'react-toastify';
 
 import { nanoid } from 'nanoid';
 
 import './style.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const blocks = {
   Row: {
@@ -30,6 +16,12 @@ const blocks = {
     element: 'block',
     type: 'Row',
     parent: 'root'
+  },
+  Input: {
+    id: null,
+    orderBy: 1,
+    element: 'input',
+    type: 'text'
   }
 };
 
@@ -45,47 +37,19 @@ blocks['Div'] = {
   classes: '',
 };
 
-const Creator = ({ config_name, onUpdate }) => {
-  const [ ready, setReady ] = useState(false);
+const Creator = ({ config, onUpdate }) => {
   const [ loading, setLoading ] = useState(true);
-  const [ config, setConfig ] = useState([]);
-
-  const getConfig = (name) => {
-    // to api, config_name
-    // setConfig([
-    //   {
-    //     element: 'block',
-    //     type: 'Row',
-    //     child: [
-    //       {
-    //         id: 2,
-    //         element: 'block',
-    //         type: 'Col',
-    //         md: 12,
-    //         classes: '',
-    //       },
-    //     ]
-    //   }
-    // ]);
-    setReady(true);
-  }
+  const [ localConfig, setConfig ] = useState([]);
 
   useEffect(() => {
-    if(!ready) {
-      console.log('init')
-      getConfig(config_name);
-    }
-  }, [ready]);
+    setConfig(config);
+  }, [])
 
   const handleSetConfig = (new_state) => {
     setLoading(false);
     setConfig(new_state);
     setLoading(true);
   }
-
-  let rootConf = [...config];
-
-  console.log(rootConf)
 
   const [ isOpenDialog, setIsOpenDialog ] = useState(false);
   const [ newBlock, setNewBlock ] = useState({});
@@ -98,7 +62,7 @@ const Creator = ({ config_name, onUpdate }) => {
     // id_prev - id prev block OR null, id пред-го блока
     // upd - true/false, блок редактируется
 
-    let _config = [...config];
+    let _config = [...localConfig];
     if(upd) { // меняем блок
       let index = _config.findIndex( el => el.id === block.id);
       _config.splice(index, 1, {...block});
@@ -183,7 +147,7 @@ const Creator = ({ config_name, onUpdate }) => {
 
   const renderButtons = () => {
 
-    let parentBlock = config.find( el => el.id === newBlockParent.parent);
+    let parentBlock = localConfig.find( el => el.id === newBlockParent.parent);
 
     if(!parentBlock || !isOpenDialog) return 'null'; else {
 
@@ -205,6 +169,11 @@ const Creator = ({ config_name, onUpdate }) => {
           group: 'Grid',
           visible: ['Row', 'Col', 'Div']
         },
+        {
+          type: 'Input',
+          group: 'Form',
+          visible: ['Col']
+        }
       ];
 
       let _arrayButtons = arrayButtons.filter( el => {
@@ -219,18 +188,17 @@ const Creator = ({ config_name, onUpdate }) => {
             <Col md={12} key={nanoid()} >
               <h6 className='bp3-heading'>{group}</h6>
             </Col>,
-            <Col md={12} >
+            <Col md={12} key={nanoid()} >
               {
                 _arrayButtons.filter( button => button.group == group)
                   .map(button => {
                     return <Button
                       key={nanoid()}
-                      outlined
-                      intent='primary'
-                      text={button.type}
+                      ghost
+                      type='primary'
                       onClick={()=>handleAdd(button.type)}
                       style={{ marginRight: '5px' }}
-                    />
+                    >{button.type}</Button>
                   })
               }
             </Col>,
@@ -248,19 +216,20 @@ const Creator = ({ config_name, onUpdate }) => {
     : <>
       <Generator
         parent='root'
-        config={rootConf}
+        config={localConfig}
         setConfig={(_) => handleSetConfig(_) }
         handlePlusButton={handlePlusButton}
         handleUpdOpenBlock={handleUpdOpenBlock}
       />
-      <Dialog
-        isOpen={isOpenDialog}
-        onClose={handleCloseDialog}
+      <Modal
+        visible={isOpenDialog}
+        onCancel={handleCloseDialog}
         title={'Добавление блока, ' + newBlockParent.parent}
+        footer={false}
       >
         <div style={{ marginTop: '10px' }} />
         { isOpenDialog ? renderButtons() : null}
-      </Dialog>
+      </Modal>
     </>}
   </Col>
 };
@@ -309,19 +278,18 @@ const Generator = ({
     setConfig(_config);
   }
 
-  let button_plus = (parent, orderBy_prev) => {    
-    return <div className='creator-button-block'>
+  let button_plus = (parent, orderBy_prev, type) => {    
+    return <div className={`creator-button-block type-block-${type}`}>
       <Button
         onClick={() => handlePlusButton(parent, orderBy_prev) }
         className='creator-plus-button'
-        intent='primary'
-        small
-        text='+'
-      />
+        type='primary'
+        size='small'
+      >+</Button>
     </div>
   }
 
-  const GBlock = ({ el_conf }) => {
+  const GBlock = ({ el_conf, parent, orderBy_prev }) => {
     let params = {};
 
     if(el_conf.type === 'Col') {
@@ -343,57 +311,63 @@ const Generator = ({
         
         <div style={{ float: 'right'}}>
           <Button
-            intent='warning' small icon='cog'
+            type='primary' size='small' icon={<FontAwesomeIcon icon='cog' />}
             onClick={() => handleUpdOpenBlock(el_conf.id) }
           />
-          
-          <Popover2
-            className='bp3-dark'
-            popoverClassName={'delete-popoper'}
-            content={<div key="text">
-              <span>Подтвердите удаление</span>
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 15 }}>
-                <Button small intent='danger' onClick={() => handleDeleteBlock(el_conf.id)} >
-                  Удалить
-                </Button>
-              </div>
-            </div>
-            }
+          <Popconfirm
+            title="Подтвердите удаление"
+            onConfirm={() => handleDeleteBlock(el_conf.id)}
+            okText="Да"
           >
-            <Button intent='danger' small icon='trash'/>
-          </Popover2>
+            <Button size='small' type='primary' danger icon={<FontAwesomeIcon icon='trash' />} ></Button>
+          </Popconfirm>
         </div>
       </div>
 
     return {
-      Row: <Row style={{ border: '1px solid #ffcfcf', padding: '3px', marginBottom: '2px' }} {...params}>
-          {headerBlock('Row')}
-          {child_render}
-        </Row>,
-      Col: <Col style={{
-            border: '1px solid rgb(83 171 185)',
-            padding: '3px',
-            marginTop: '7px'
-          }}
-          className={el_conf.classes} {...params}
-        >
-          {headerBlock('Col')}
-          {child_render}
-        </Col>,
-      Div: <div className={el_conf.classes} {...params}>
-          {headerBlock('Div')}
-          {child_render}
-        </div>,
+      Row: <>
+          <Row style={{ border: '1px solid #ffcfcf', padding: '3px', marginBottom: '2px' }} {...params}>
+            {headerBlock('Row')}
+            {child_render}
+          </Row>
+          {button_plus(parent, orderBy_prev, 'Row')}
+        </>,
+      Col: <>
+          <Col style={{
+              border: '1px solid rgb(83 171 185)',
+              padding: '3px',
+              marginTop: '7px'
+            }}
+            className={el_conf.classes} {...params}
+          >
+            {headerBlock('Col')}
+            {child_render}
+          </Col>
+          {button_plus(parent, orderBy_prev, 'Col')}
+        </>,
+      Div: <>
+          <div className={el_conf.classes} {...params}>
+            {headerBlock('Div')}
+            {child_render}
+          </div>
+          {button_plus(parent, orderBy_prev, 'Div')}
+        </>,
     }[el_conf.type]
+  };
+
+  const GInput = ({ el_conf }) => {
+
+    return <Input></Input>
   };
 
   const GSwitcher = ({ el_conf, orderBy_prev }) => {
     return {
       block: <>
-        <GBlock el_conf={el_conf}/>
-        {button_plus(parent, orderBy_prev)}
+        <GBlock el_conf={el_conf} parent={parent} orderBy_prev= {orderBy_prev}/>
       </>,
-      // select: <GSelect el_conf={el_conf} />
+      input: <>
+        <GInput el_conf={el_conf}/>
+      </>
     }[el_conf.element] || <> Компонент {el_conf.element} недоступен </>
   };
 

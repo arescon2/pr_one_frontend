@@ -28,7 +28,6 @@ const App = () => {
   const { logined, loadingGlobal } = useSelector((state) => state.main);
   const dispatch = useDispatch();
 
-  const tokens = getTokens();
   const location = useLocation();
 
   const checkAuth = async () => {
@@ -62,7 +61,6 @@ const App = () => {
         :
         <Routes>          
           <Route path="login" element={<Login />} />
-          <Route path="registration" element={<Registration />} />
         </Routes>
     }
   </>
