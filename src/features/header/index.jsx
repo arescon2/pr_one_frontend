@@ -1,53 +1,42 @@
 import './style.scss';
 
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-
-import {
-  Button,
-  ButtonGroup,
-  Menu,
-  MenuItem,
-  Position,
-  Alignment,
-  Navbar
-} from "@blueprintjs/core";
-
-import {
-  Popover2,
-} from "@blueprintjs/popover2";
-
 import { useSelector, useDispatch } from 'react-redux';
+import { Button, Divider } from 'antd';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserCog, faPlus, faBell, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { setLogined, setLoading } from '../stores/mainSlice';
+import { Post } from '../api';
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogOut = () => {
-    dispatch(setLogined(false));
-    navigate('/login');
+    Post('/auth/logout').then( () => {
+      navigate('/login');      
+      dispatch(setLogined(false));
+    });
   }
   
   const handleAdd = () => {
     navigate('/page/new_ticket');
   }
 
+  const handleGoCabinet = () => navigate('/user-cabinet');
+
   return (
-    <Navbar className='header-block'>
-      <Navbar.Group align={Alignment.LEFT}>
-        <Navbar.Heading>
-          <Button minimal icon='plus' onClick={handleAdd} />
-        </Navbar.Heading>
-      </Navbar.Group>
-      <Navbar.Group align={Alignment.RIGHT}>
-        <Navbar.Divider />
-        <Button icon='cog' minimal onClick={()=> navigate('/user-cabinet')}>Arescon</Button>
-        <Button icon='notifications' minimal />
-        <Navbar.Divider />
-        <Button intent='danger' icon="log-out" minimal onClick={handleLogOut} />
-      </Navbar.Group>
-    </Navbar>
+    <div className='header-block'>
+      <Button icon={<FontAwesomeIcon icon={faPlus} />} type='text' ></Button>
+      <div className='user-block'>
+        <Button icon={<FontAwesomeIcon icon={faUserCog} />} type='text' onClick={handleGoCabinet} ></Button>
+        <Button icon={<FontAwesomeIcon icon={faBell} />} type='text' ></Button>
+        <Divider type='vertical'/>
+        <Button icon={<FontAwesomeIcon icon={faSignOutAlt} />} type='text' danger onClick={handleLogOut}  ></Button>
+      </div>
+    </div>
   )
 }
 

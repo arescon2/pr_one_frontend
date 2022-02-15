@@ -1,4 +1,4 @@
-import { Button, NonIdealState } from '@blueprintjs/core';
+import { Button, Col, Empty, Row } from 'antd';
 import { useNavigate } from 'react-router';
 
 import './style.scss';
@@ -6,12 +6,15 @@ import './style.scss';
 const NotPage = () => {
   const navigate = useNavigate();
   return (
-    <NonIdealState
-      icon={"code"}
-      action={<Button text='На главную страницу' intent='primary' onClick={()=> navigate('/')} />}
-      title="404"
-      description={'Страница не существует'}
-    />
+    <Row>
+      <Col md={24}>
+        <Empty
+          description={'Страница не существует'}
+        >
+          <Button type='primary' onClick={()=> navigate('/')} >На главную страницу</Button>
+        </Empty>
+      </Col>
+    </Row>
   )
 }
 

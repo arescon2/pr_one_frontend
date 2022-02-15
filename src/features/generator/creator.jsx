@@ -4,18 +4,18 @@ import {
   useLocation, useSearchParams
 } from 'react-router-dom';
 
-import { Container, Row, Col } from 'react-grid-system';
+// import { Container, Row, Col } from 'react-grid-system';
 
-import {
-  Classes, InputGroup, FormGroup,
-  Button, Menu, MenuDivider, MenuItem,
-  Tabs, Tab, Dialog, H5, Position,
-  Classes as CoreClasses,
-  Divider,
-} from '@blueprintjs/core';
+// import {
+//   Classes, InputGroup, FormGroup,
+//   Button, Menu, MenuDivider, MenuItem,
+//   Tabs, Tab, Dialog, H5, Position,
+//   Classes as CoreClasses,
+//   Divider,
+// } from '@blueprintjs/core';
 
-import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
-import { Select } from '@blueprintjs/select';
+// import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
+// import { Select } from '@blueprintjs/select';
 
 import { toast } from 'react-toastify';
 

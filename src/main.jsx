@@ -8,6 +8,7 @@ import App from './pages/App';
 import { store } from './stores';
 import { Provider } from 'react-redux';
 
+import 'antd/dist/antd.css';
 import './styles/index.scss';
 import 'react-toastify/dist/ReactToastify.css';
 

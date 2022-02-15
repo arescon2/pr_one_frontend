@@ -8,13 +8,26 @@ body {
   background-color: #202B33;
 }
 
+.rootLayout {
+  background: none;
+}
+
+.header-block {
+  margin: 5px;
+  border-bottom: 1px solid #202b333d;
+}
+
+.user-block {
+  float: right;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 .body-block {
-  padding-top: 10px;
+  padding: 5px 10px;
 }
 
 .card-root-block {
@@ -26,4 +39,31 @@ code {
 
 .left-menu-wrapper {
   margin-top: 10px;
+}
+
+.root-menu {
+  background: none;
+  border: none;
+  color: white;
+
+  .ant-menu-item-active, .ant-menu-item-selected {
+    background: none !important;
+  }
+}
+
+.success-button {
+  background-color: #1C4017;
+  color: #eef3ed;
+  &:hover {
+    background-color: #265a1f;
+    color: #eef3ed;
+  }
+}
+
+.fleft {
+  float: left;
+}
+
+.wrapper-tab > .ant-page-header {
+  padding: 0;
 }

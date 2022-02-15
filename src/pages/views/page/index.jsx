@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import {
-  NonIdealState, Slider, Spinner, SpinnerSize
-} from "@blueprintjs/core";
+import { Empty } from 'antd'
 
 import Renderer from './renderer';
 
@@ -26,11 +24,7 @@ function Page() {
     // get page config
   }, [params.pagename]);
 
-  return !loading ? <NonIdealState
-    className='spinner-page'
-    icon={<Spinner size={SpinnerSize.STANDARD} />}
-    description="Подождите, идет загрузка данных"
-  /> : <Renderer params={params} loading={loading} />
+  return !loading ? <Empty /> : <Renderer params={params} loading={loading} />
 };
 
 export default Page;

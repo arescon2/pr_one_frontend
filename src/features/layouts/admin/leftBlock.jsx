@@ -1,72 +1,64 @@
-import Generator from '../../generator';
+import { useNavigate } from 'react-router-dom';
+
+import { Menu } from 'antd';
+import { nanoid } from 'nanoid';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const LeftBlock = () => {
-  let data = {
-    menu: [
-      {
-        id: 1,
-        icon: 'home',
-        placeholder: 'Главная страница',
-        linkto: '/'
-      },
-      {
-        id: 2,
-        icon: 'form',
-        placeholder: 'Тикеты',
-        linkto: '/page/tickets'
-      },
-      {
-        id: 3,
-        icon: 'cog',
-        placeholder: 'Настройки',
-        linkto: '/page/settings'
-      }
-    ]
-  }
-
-  let json = [
+  let data = [
     {
       id: 1,
-      element: 'block',
-      type: 'Row',
-      classes: 'left-menu-wrapper',
-      child: [
-        {
-          element: 'collection',
-          data: 'menu',
-          child: [
-            {
-              element: 'block',
-              type: 'Col',
-              classes: 'centered-child',
-              child: [
-                {
-                  id: 'id',
-                  element: 'button',
-                  type: 'button',
-                  classes: '',
-                  size: 'large',
-                  icon: 'icon',
-                  fill: false,
-                  minimal: true,
-                  disable: false,
-                  linkto: 'linkto',
-                  placeholder: 'placeholder'
-                }
-              ]
-            },
-          ]
-        }
-      ]
+      icon: 'home',
+      title: 'Главная страница',
+      placeholder: 'Главная страница',
+      link: '/'
+    },
+    {
+      id: 2,
+      icon: 'clipboard-list',
+      title: 'Тикеты',
+      placeholder: 'Тикеты',
+      link: '/page/tickets'
+    },
+    {
+      id: 3,
+      icon: 'cog',
+      title: 'Настройки',
+      placeholder: 'Настройки',
+      link: '/settings'
     }
   ];
 
+  const navigate = useNavigate();
+
+  const handlerGoLink = (elMenu) => {
+    navigate(elMenu.link)
+  };
+
+  const MenuItemsCreator = () => {
+    return data.map( elMenu => {
+      return <Menu.Item
+        key={nanoid()}
+        style={{ paddingLeft: 'none' }}
+        placeholder={elMenu.placeholder}
+        onClick={() => handlerGoLink(elMenu)}
+      >
+        <FontAwesomeIcon style={{ width: '100%' }} size='lg' icon={elMenu.icon} />
+      </Menu.Item>
+    })
+  };
+
   return <div className='left-block'>
-    <Generator
-      config={json}
-      data={data}
-      // updData={(new_data) => setData(new_data)}
-    />
+    <Menu
+      className='root-menu'
+      defaultSelectedKeys={['1']}
+      defaultOpenKeys={['sub1']}
+      mode="vertical"
+    >
+      { MenuItemsCreator() }
+    </Menu>
   </div>
-}
-export default LeftBlock
+};
+
+export default LeftBlock;

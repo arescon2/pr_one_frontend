@@ -4,17 +4,9 @@ import {
   useLocation, useSearchParams
 } from 'react-router-dom';
 
-import {
-  Classes, InputGroup, FormGroup,
-  Button, Menu, MenuDivider, MenuItem,
-  Tabs, Tab
-} from '@blueprintjs/core';
-
-import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
-import { Container, Row, Col } from 'react-grid-system';
+import { Row, Col, Input } from 'antd';
 
 import { nanoid } from 'nanoid';
-import { Select } from '@blueprintjs/select';
 
 import './style.scss';
 import Creator from './creator';
@@ -69,7 +61,7 @@ const Generator = ({
     } else params.defaultValue = el_conf.value;
 
     let b = {
-      Text: <InputGroup
+      Text: <Input
         className={el_conf.classes}
         disabled={disable}
         {...params}

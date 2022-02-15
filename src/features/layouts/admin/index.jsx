@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { Helmet } from 'react-helmet';
-import { Container, Row, Col } from 'react-grid-system';
+
+import { Layout, Row } from 'antd';
 
 import Header from '../../header';
 import Footer from '../../footer';
@@ -10,21 +11,20 @@ import LeftBlock from './leftBlock';
 import './style.scss';
 
 const Home = (props) => {
-  return [
+  return <Layout className='rootLayout'>
     <Helmet key={nanoid()}>
       <meta charSet="utf-8" />
       <title>Journal</title>
       {/* <link rel="canonical" href="http://mysite.com/example" /> */}
-    </Helmet>,
-    <LeftBlock key={nanoid()} />,
+    </Helmet>
+    <LeftBlock key={nanoid()} />
     <div key={nanoid()} className='card-root-block'>
       <Header />
-      <Container fluid className='body-block'>
+      <Layout.Content className='body-block'>
         {props.children}
-      </Container>
-    </div>,
-    // <Footer key={nanoid()} />
-  ]
+      </Layout.Content>
+    </div>
+  </Layout>
 }
 
 export default Home
