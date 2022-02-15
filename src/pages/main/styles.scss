@@ -1,0 +1,20 @@
+.item-apps {
+  width: 400px;
+  float: left;
+  margin-right: 20px;
+  &.journal {
+    border-left: 5px solid #8a3a69;
+  }
+  &.sklad {
+    border-left: 5px solid #3a4f8a;
+  }
+  &.success {
+    background-color: #057c0e2e;
+  }
+  &.warning {
+    background-color: #a86d0152;
+  }
+  &.danger {
+    background-color: #7c05052e;
+  }
+}

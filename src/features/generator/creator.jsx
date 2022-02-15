@@ -98,44 +98,37 @@ const Creator = ({ config_name, onUpdate }) => {
     // id_prev - id prev block OR null, id пред-го блока
     // upd - true/false, блок редактируется
 
-    let _config = [...config]
-    console.log(_config, block)
-    
-    _config.push({...block});
-    
+    let _config = [...config];
+    if(upd) { // меняем блок
+      let index = _config.findIndex( el => el.id === block.id);
+      _config.splice(index, 1, {...block});
+    } else {
+      // ресортировка
+      let blocksFromParent = _config.filter(el => el.parent === block.parent)
+        .sort((a,b) => a.orderBy - b.orderBy);
+        
+      if(blocksFromParent.length > 0) {
+        let startOrderBy = block.orderBy; // начальное значение
+
+        blocksFromParent.map( el => {
+          if(el.orderBy >= startOrderBy) {
+            startOrderBy++;
+            el.orderBy = startOrderBy;
+            let index = _config.findIndex( _el => _el.id === el.id);
+
+            _config.splice(index, 1, {...el});
+          };
+        });
+        // добавляем блок
+        _config.push({...block});
+      } else {
+        // добавляем блок
+        _config.push({...block});
+      }
+    } 
+    // save and reload
     console.log(_config)
     setConfig([..._config]);
-
-    // if(upd) { // меняем блок
-    //   let index = _config.findIndex( el => el.id === block.id);
-    //   _config.splice(index, 1, {...block});
-    // } else {
-    //   // ресортировка
-    //   let blocksFromParent = _config.filter(el => el.parent === block.parent)
-    //     .sort((a,b) => a.orderBy - b.orderBy)
-
-    //   if(blocksFromParent.length > 0) {
-    //     let startOrderBy = block.orderBy; // начальное значение
-
-    //     blocksFromParent.map( el => {
-    //       if(el.orderBy > startOrderBy) {
-    //         startOrderBy++;
-    //         el.orderBy = startOrderBy;
-    //         // let index = config.findIndex( _el => _el.id === el.id);
-
-    //         // config.splice(index, 1, {...el});
-    //       };
-    //     })
-    //     // добавляем блок
-    //     config.push({...block});
-    //   } else {
-    //     // добавляем блок
-    //     config.push({...block});
-    //   }
-    // } 
-    // // save and reload
-    // console.log(config)
-    // setConfig([...config]);
   };
   
   const handlePlusButton = (parentId, orderBy_prev = 0) => {
@@ -281,19 +274,39 @@ const Generator = ({
 }) => {
 
   const handleDeleteBlock = (id) => {
-    let conf = [...config];
+    let _config = [...config];
+
+    let block = _config.find( el => el.id === id );
 
     const delBlock = (_id) => {
       // удаляем элемент
-      conf = conf.filter( el => el.id !== id);
+      _config = _config.filter( el => el.id !== id);
       // ищем и удаляем дочек
-      conf.map( el => {
+      _config.map( el => {
         if(el.parent === _id) delBlock(el.id)
       });
     };
-  
+
     delBlock(id);
-    setConfig(conf);
+
+    let blocksFromParent = _config.filter(el => el.parent === block.parent)
+      .sort((a,b) => a.orderBy - b.orderBy);
+
+    let startOrderBy = block.orderBy;
+
+    blocksFromParent.map( el => {
+      if(el.orderBy >= startOrderBy) {
+        console.log('tut')
+        el.orderBy = startOrderBy;
+        let index = _config.findIndex( _el => _el.id === el.id);
+
+        startOrderBy++;
+
+        _config.splice(index, 1, {...el});
+      };
+    });
+
+    setConfig(_config);
   }
 
   let button_plus = (parent, orderBy_prev) => {    

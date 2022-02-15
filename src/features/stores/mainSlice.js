@@ -17,11 +17,14 @@ export const mainSlice = createSlice({
       state.logined = action.payload;
     },
     setLoading: (state, action) => {
-      state.loadingGlobal = action.payload
+      state.loadingGlobal = action.payload;
     },
-  },
+    setPageTitle: (state, action) => {
+      state.pageTitle = action.payload;
+    }
+  }
 })
 
-export const { setMainMenu, setLogined, setLoading } = mainSlice.actions
+export const { setMainMenu, setLogined, setLoading, setPageTitle } = mainSlice.actions
 
 export default mainSlice.reducer

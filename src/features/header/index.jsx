@@ -11,6 +11,8 @@ import { setLogined, setLoading } from '../stores/mainSlice';
 import { Post } from '../api';
 
 const Header = () => {
+  const { pageTitle } = useSelector((state) => state.main);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
