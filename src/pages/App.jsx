@@ -15,6 +15,7 @@ import { Get } from '../features/api';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus } from '@fortawesome/free-solid-svg-icons'
+import RoutesBlock from './routes';
 
 library.add(faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus);
 

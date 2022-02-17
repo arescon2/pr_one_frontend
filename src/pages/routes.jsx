@@ -4,7 +4,7 @@ import NotFound from './views/404';
 import PageView from './views/page';
 import Settings from './settings';
 
-export default RoutesBlock = () =>
+const RoutesBlock = () =>
 	<Routes>
 		<Route path="/" element={<Main />} />
 		<Route path="/settings" element={<Settings />} />
@@ -13,3 +13,5 @@ export default RoutesBlock = () =>
 		<Route path="/page/:pagename" element={<PageView />} />
 		<Route path="*" element={<NotFound />} />
 	</Routes>
+
+export default RoutesBlock;
