@@ -5,17 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLogined, setLoading } from '../features/stores/mainSlice';
 
 import AdminLayout from '../features/layouts/admin';
-import Login from '../pages/login';
 
 import LoadingPage from '../features/loadingPage';
 
-import Main from './main';
-import NotFound from './views/404';
-
-import PageView from './views/page';
+import Login from '../pages/login';
 
 import { getTokens } from '../libs';
-import Settings from './settings';
 import { Get } from '../features/api';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -49,14 +44,7 @@ const App = () => {
     { loadingGlobal ? <LoadingPage/> : null}
     {
       logined ? <AdminLayout>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/settings/:pagename" element={<Settings />} />
-            <Route path="/settings/:pagename/:id" element={<Settings />} />
-            <Route path="/page/:pagename" element={<PageView />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <RoutesBlock />
         </AdminLayout>
         :
         <Routes>          
