@@ -10,4 +10,17 @@ const setTokens = (accessToken, refreshToken) => {
   localStorage.setItem('refreshToken', refreshToken)
 }
 
-export { getTokens, setTokens };
+const DicSex = [
+  {
+    id: 1,
+    name: 'Мужской',
+    short: 'М',
+  },
+  {
+    id: 2,
+    name: 'Женский',
+    short: 'Ж',
+  },
+];
+
+export { getTokens, setTokens, DicSex };

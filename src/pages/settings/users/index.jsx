@@ -8,14 +8,14 @@ import moment from 'moment';
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Delete, Get } from '../../../features/api';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import { setOrganizations, setPaginationSetting, setSettingForm } from '../../../features/stores/settingsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSettingList, setPaginationSetting, setSettingForm } from '../../../features/stores/settingsSlice';
 
-const OrgsList = () => {
+const UserList = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
 
-  const { organization, total, pagination } = useSelector((state: RootStateOrAny) => state.settings);
+  const { list, total, pagination } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
 
   const handleDelete = (item) => {
@@ -32,13 +32,13 @@ const OrgsList = () => {
       width: '100px'
     },
     {
-      name: 'Название',
-      selector: row => row.name,
+      name: 'ФИО',
+      selector: row => `${row.fam} ${row.im} ${row.otch ? row.otch : ''}`,
       grow: 2
     },
     {
-      name: 'ИНН',
-      selector: row => row.inn,
+      name: 'ДР',
+      selector: row => moment(row.dateBirth).format('DD-MM-YYYY'),
     },
     {
       name: 'Дата создания',
@@ -67,11 +67,13 @@ const OrgsList = () => {
     console.log(args)
   };
 
-  const handleOpenForm = (item: any) => {
+  const handleOpenForm = (data) => {
+    let item = {...data}
     if (item === 'new') {
       dispatch(setSettingForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
+      item.dateBirth = moment(item.dateBirth);
       dispatch(setSettingForm(item))
       navigate(`/settings/${pagename}/${item.id}`);
     }
@@ -81,8 +83,8 @@ const OrgsList = () => {
 
   const getData = async () => {
     message.loading({ content: 'Обновление...', key: 'loading' });
-    await Get('/organization', pagination).then((res) => {
-      dispatch(setOrganizations(res.data));
+    await Get('/person', pagination).then((res) => {
+      dispatch(setSettingList(res.data));
       message.success({ content: 'Обновлено', key: 'loading' });
     });
   };
@@ -107,11 +109,11 @@ const OrgsList = () => {
     <Col md={24}>
       <div className='wrapper-tab'>
         <PageHeader
-          title='Организации'
+          title='Пользователи'
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Новая организация</Button>,
+            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Новый пользователь</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />
@@ -133,7 +135,7 @@ const OrgsList = () => {
     <Col md={24}>
       <DataTable
         columns={columns}
-        data={organization}
+        data={list}
         selectableRows
         onSelectedRowsChange={handlerSelectRow}
         dense
@@ -142,4 +144,4 @@ const OrgsList = () => {
   </Row>
 };
 
-export default OrgsList;
+export default UserList;

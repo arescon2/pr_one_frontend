@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  organization: [],
+  list: [],
   total: 0,
   pagination: {
     page: 1,
@@ -14,8 +14,8 @@ export const settingsSlice = createSlice({
   name: 'settings_store',
   initialState,
   reducers: {
-    setOrganizations: (state, action) => {
-      state.organization = [...action.payload.data]
+    setSettingList: (state, action) => {
+      state.list = [...action.payload.data]
       state.total = action.payload.count
     },
     setSettingForm: (state, action) => {
@@ -27,6 +27,6 @@ export const settingsSlice = createSlice({
   }
 })
 
-export const { setOrganizations, setSettingForm, setPaginationSetting } = settingsSlice.actions
+export const { setSettingList, setSettingForm, setPaginationSetting } = settingsSlice.actions
 
 export default settingsSlice.reducer

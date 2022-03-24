@@ -14,6 +14,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import moment from 'moment';
 import 'moment/locale/ru';
+import { ConfigProvider } from 'antd';
+
+import locale from 'antd/lib/locale/ru_RU';
 
 moment.locale('ru')
 
@@ -21,7 +24,9 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <ConfigProvider locale={locale}>
+          <App />
+        </ConfigProvider>
         <ToastContainer theme='dark' />
       </Provider>
     </BrowserRouter>

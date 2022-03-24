@@ -1,15 +1,17 @@
-import { Col, Row, PageHeader, Form, Button, Input, Typography, Skeleton, Divider, InputNumber, message } from 'antd';
+import { Col, Row, PageHeader, Form, Button, Input, Typography, Skeleton, Divider, InputNumber, message, DatePicker, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import _ from 'lodash';
+import moment from 'moment';
 
 import { Get, Post, Put } from '../../../features/api';
 import { setSettingForm } from '../../../features/stores/settingsSlice';
+import { DicSex } from '../../../libs';
 
 
-const OrgsOne = () => {
+const UserOne = () => {
   const navigate = useNavigate();
   const { pagename, id } = useParams();
 
@@ -25,13 +27,16 @@ const OrgsOne = () => {
   const handleBack = () => navigate(`/settings/${pagename}`);
 
   const onSaveOne = async (data) => {
+    console.log(data);
+    data.sex ? data.sexText = (_.find(DicSex, (el) => el.id === data.sex )).short : null;
+    data.dateBirth ? data.dateBirth = moment(data.dateBirth).toISOString() : null;
+
     if (updMode) {
-      await Put('/organization', data).then((res) => {
+      await Put('/person', data).then((res) => {
         message.success('Изменения сохранены');
-        handleReset();
       });
     } else {
-      await Post('/organization', data).then((res) => {
+      await Post('/person', data).then((res) => {
         message.success('Организация добавлена');
         handleReset();
         handleBack();
@@ -47,8 +52,9 @@ const OrgsOne = () => {
   }
 
   const getData = async () => {
-    await Get('/organization?filters=' + JSON.stringify({ id: id })).then((res) => {
-      const data = res.data.data[0];
+    await Get('/person?filters=' + JSON.stringify({ id: id })).then((res) => {
+      let data = res.data.data[0];
+      data.dateBirth = moment(data.dateBirth);
       handleReset()
       dispatch(setSettingForm(data))
     });
@@ -70,7 +76,7 @@ const OrgsOne = () => {
     <Col md={24}>
       <div className='wrapper-tab'>
         <PageHeader
-          title='Организация'
+          title='Пользователь'
           subTitle={id !== 'new' ? 'Редактирование' : 'Новый'}
           onBack={handleBack}
         />
@@ -106,8 +112,8 @@ const OrgsOne = () => {
                   <Row gutter={12}>
                     <Col span={24}>
                       <Form.Item
-                        name='name'
-                        label='Название'
+                        name='fam'
+                        label='Фамилия'
                         rules={[{ required: true }]}
                       >
                         <Input />
@@ -115,19 +121,19 @@ const OrgsOne = () => {
                     </Col>
                     <Col span={24}>
                       <Form.Item
-                        name='inn'
-                        label='ИНН'
+                        name='im'
+                        label='Имя'
                         rules={[{ required: true }]}
                       >
-                        <InputNumber style={{ width: '100%' }} disabled={updMode} />
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item
-                        name='ogrn'
-                        label='ОГРН'
+                        name='otch'
+                        label='Отчество'
                       >
-                        <InputNumber style={{ width: '100%' }} disabled={updMode} />
+                        <Input />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -136,46 +142,32 @@ const OrgsOne = () => {
                   <Row gutter={12}>
                     <Col span={24}>
                       <Form.Item
-                        name='address'
-                        label='Адрес'
+                        name='dateBirth'
+                        label='Дата рождения'
                       >
-                        <Input />
+                        <DatePicker format='DD-MM-YYYY'/>
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item
-                        name='index'
-                        label='Индекс'
+                        name='sex'
+                        label='Пол'
                       >
-                        <InputNumber style={{ width: '100%' }} type='number' />
+                        <Select >
+                          {
+                            DicSex.map(el => {
+                              return <Select.Option value={el.id}>{el.name}</Select.Option>
+                            })
+                          }
+                        </Select>
                       </Form.Item>
                     </Col>
                   </Row>
-                </Col>
-                <Col span={24}>
-                  <Divider />
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name='tel'
-                    label='Телефон'
-                  >
-                    <InputNumber style={{ width: '100%' }} type='tel' />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name='email'
-                    label='Эл.Почта'
-                  >
-                    <Input type='email' />
-                  </Form.Item>
                 </Col>
               </Row>
               <Col span={24}>
                 <Divider />
               </Col>
-              
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit">
                   { !updMode ? 'Добавить' : 'Сохранить' }
@@ -193,4 +185,4 @@ const OrgsOne = () => {
   </Row>
 };
 
-export default OrgsOne;
+export default UserOne;

@@ -7,6 +7,8 @@ import Blocks from './blocks';
 import BlocksOne from './blocks/form';
 import OrgsList from './organizations';
 import OrgsOne from './organizations/form';
+import UserList from './users';
+import UserOne from './users/form';
 
 const Settings = () => {
   const { pagename, id } = useParams();
@@ -15,12 +17,12 @@ const Settings = () => {
   const listMenu = [
     {
       id: 1,
-      text: 'Блоки',
-      placeholder: 'Блоки',
-      linkto: 'blocks',
-      key: 'Blocks',
-      list: <Blocks />,
-      form: <BlocksOne />
+      text: 'Пользователи',
+      placeholder: 'Пользователи',
+      linkto: 'users',
+      key: 'Users',
+      list: <UserList />,
+      form: <UserOne />
     },
     {
       id: 2,
@@ -36,6 +38,12 @@ const Settings = () => {
   const handleTabChange = (navbarTabId) => {
     navigate(`/settings/${navbarTabId}`);
   };
+
+  useEffect(() => {
+    if (!pagename) {
+      navigate(`/settings/${listMenu[0].linkto}`);
+    }
+  }, [])
 
   return <Tabs
     size='small'
