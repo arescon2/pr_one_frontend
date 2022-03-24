@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
-import { Col, Row, Tabs } from 'antd';
-import Blocks from './blocks';
-import BlocksOne from './blocks/form';
+import { Col, Layout, Menu, Row, Tabs } from 'antd';
 import OrgsList from './organizations';
 import OrgsOne from './organizations/form';
 import UserList from './users';
 import UserOne from './users/form';
+
+import _ from 'lodash';
 
 const Settings = () => {
   const { pagename, id } = useParams();
@@ -35,8 +35,8 @@ const Settings = () => {
     }
   ]
 
-  const handleTabChange = (navbarTabId) => {
-    navigate(`/settings/${navbarTabId}`);
+  const handleGoLink = (item) => {
+    navigate(`/settings/${item.key}`);
   };
 
   useEffect(() => {
@@ -45,30 +45,26 @@ const Settings = () => {
     }
   }, [])
 
-  return <Tabs
-    size='small'
-    defaultActiveKey={pagename ? pagename : listMenu[0].linkto}
-    id={nanoid()}
-    className='fill generator-tab'
-    tabPosition='left'
-    onChange={handleTabChange}
-  >
-    {
-      listMenu.map( menuItem => {
-        return <Tabs.TabPane
-          key={menuItem.key}
-          tab={menuItem.text || ''}
-        >
-          <Col md={24}>
-            {
-              id ? menuItem.form : menuItem.list
-            }
-            
-          </Col>
-        </Tabs.TabPane>
-      })
-    }
-  </Tabs>
+  return <Layout className='wrapper'>
+    <Layout.Sider theme='light'>
+      <Menu onClick={handleGoLink} selectedKeys={[pagename]} mode='vertical'>
+        {
+          listMenu.map(el => {
+            return <Menu.Item key={el.linkto}>{ el.text }</Menu.Item>
+          })
+        }
+      </Menu>
+    </Layout.Sider>
+    <Layout.Content className='wrapper'>
+      {
+        (() => {
+          const curMenu = _.find(listMenu, el => el.linkto === pagename);
+
+          return curMenu ? id ? curMenu.form : curMenu.list : null
+        })()
+      }
+    </Layout.Content>
+  </Layout>
 };
 
 export default Settings;

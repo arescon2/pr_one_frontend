@@ -5,21 +5,23 @@ import { Col, Row, Button, Popover, PageHeader, message, Pagination } from 'antd
 
 import moment from 'moment';
 
+import _ from 'lodash';
+
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Delete, Get } from '../../../features/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSettingList, setPaginationSetting, setSettingForm } from '../../../features/stores/settingsSlice';
+import { setUsersList, setUsersPagin, setUsersForm } from '../../../features/stores/usersSlice';
 
 const UserList = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
 
-  const { list, total, pagination } = useSelector((state) => state.settings);
+  const { list, total, pagination } = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
   const handleDelete = (item) => {
-    Delete(`/organization?id=${item.id}`).then((result) => {
+    Delete(`/person?id=${item.id}`).then((result) => {
       message.success(`Организация "${item.name}" удалена`);
       getData();
     });
@@ -70,40 +72,36 @@ const UserList = () => {
   const handleOpenForm = (data) => {
     let item = {...data}
     if (item === 'new') {
-      dispatch(setSettingForm({}))
+      dispatch(setUsersForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
       item.dateBirth = moment(item.dateBirth);
-      dispatch(setSettingForm(item))
+      dispatch(setUsersForm(item))
       navigate(`/settings/${pagename}/${item.id}`);
     }
   };
 
   const handleRefresh = () => getData();
 
-  const getData = async () => {
-    message.loading({ content: 'Обновление...', key: 'loading' });
+  const getData = async (first) => {
+    first ? null : message.loading({ content: 'Обновление...', key: 'loading' });
     await Get('/person', pagination).then((res) => {
-      dispatch(setSettingList(res.data));
-      message.success({ content: 'Обновлено', key: 'loading' });
+      first ? null : message.success({ content: 'Обновлено', key: 'loading' });
+      dispatch(setUsersList(res.data));
     });
   };
 
   const onShowSizeChange = (curPage, newSize) => {
-    dispatch(setPaginationSetting({ size: newSize, page: curPage }));
+    dispatch(setUsersPagin({ size: newSize, page: curPage }));
   }
 
   const onChangePage = (page, size) => {
-    dispatch(setPaginationSetting({ page: page }))
+    dispatch(setUsersPagin({ page: page }))
   }
 
   useEffect(() => {
-    getData();
+    getData(true);
   }, []);
-
-  useEffect(() => {
-    getData();
-  }, [pagination]);
 
   return <Row>
     <Col md={24}>

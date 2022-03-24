@@ -9,13 +9,13 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Delete, Get } from '../../../features/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSettingList, setPaginationSetting, setSettingForm } from '../../../features/stores/settingsSlice';
+import { setOrgsList, setOrgsForm, setOrgsPagin } from '../../../features/stores/orgsSlice';
 
 const OrgsList = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
 
-  const { list, total, pagination } = useSelector((state) => state.settings);
+  const { list, total, pagination } = useSelector((state) => state.orgs);
   const dispatch = useDispatch();
 
   const handleDelete = (item) => {
@@ -69,38 +69,38 @@ const OrgsList = () => {
 
   const handleOpenForm = (item) => {
     if (item === 'new') {
-      dispatch(setSettingForm({}))
+      dispatch(setOrgsForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
-      dispatch(setSettingForm(item))
+      dispatch(setOrgsForm(item))
       navigate(`/settings/${pagename}/${item.id}`);
     }
   };
 
   const handleRefresh = () => getData();
 
-  const getData = async () => {
-    message.loading({ content: 'Обновление...', key: 'loading' });
+  const getData = async (first) => {
+    first ? null : message.loading({ content: 'Обновление...', key: 'loading' });
     await Get('/organization', pagination).then((res) => {
-      dispatch(setSettingList(res.data));
-      message.success({ content: 'Обновлено', key: 'loading' });
+      dispatch(setOrgsList(res.data));
+      first ? null : message.success({ content: 'Обновлено', key: 'loading' });
     });
   };
 
   const onShowSizeChange = (curPage, newSize) => {
-    dispatch(setPaginationSetting({ size: newSize, page: curPage }));
+    dispatch(setOrgsPagin({ size: newSize, page: curPage }));
   }
 
   const onChangePage = (page, size) => {
-    dispatch(setPaginationSetting({ page: page }))
+    dispatch(setOrgsPagin({ page: page }))
   }
 
   useEffect(() => {
-    getData();
+    getData(true);
   }, []);
 
   useEffect(() => {
-    getData();
+    getData(true);
   }, [pagination]);
 
   return <Row>

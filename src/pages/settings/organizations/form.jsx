@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
 import { Get, Post, Put } from '../../../features/api';
-import { setSettingForm } from '../../../features/stores/settingsSlice';
+import { setOrgsForm } from '../../../features/stores/orgsSlice';
 
 
 const OrgsOne = () => {
@@ -17,7 +17,7 @@ const OrgsOne = () => {
 
   const [ form ] = Form.useForm();
 
-  const { settingFormOne } = useSelector((state) => state.settings);
+  const { formOne } = useSelector((state) => state.orgs);
   const dispatch = useDispatch();
 
   const [ localLoading, setLocalLoading ] = useState(true);
@@ -28,12 +28,10 @@ const OrgsOne = () => {
     if (updMode) {
       await Put('/organization', data).then((res) => {
         message.success('Изменения сохранены');
-        handleReset();
       });
     } else {
       await Post('/organization', data).then((res) => {
         message.success('Организация добавлена');
-        handleReset();
         handleBack();
       }).catch(error => {
         message.error('Ошибка: ' + error.message)
@@ -50,7 +48,7 @@ const OrgsOne = () => {
     await Get('/organization?filters=' + JSON.stringify({ id: id })).then((res) => {
       const data = res.data.data[0];
       handleReset()
-      dispatch(setSettingForm(data))
+      dispatch(setOrgsForm(data))
     });
   }
 
@@ -58,7 +56,7 @@ const OrgsOne = () => {
     let isMounted = true;
 
     if (isMounted) {
-      if (_.isEmpty(settingFormOne) && updMode) {
+      if (_.isEmpty(formOne) && updMode) {
         getData()
       } else handleReset();
     };
@@ -83,7 +81,7 @@ const OrgsOne = () => {
           <Col md={24}>
             <Form
               size='small'
-              initialValues={settingFormOne}
+              initialValues={formOne}
               form={form}
               name='form_orgs'
               className="ant-advanced-search-form"

@@ -5,11 +5,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import _ from 'lodash';
 import moment from 'moment';
+import { nanoid } from 'nanoid';
 
-import { Get, Post, Put } from '../../../features/api';
-import { setSettingForm } from '../../../features/stores/settingsSlice';
 import { DicSex } from '../../../libs';
 
+import { Get, Post, Put } from '../../../features/api';
+import { setUsersForm } from '../../../features/stores/usersSlice';
 
 const UserOne = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const UserOne = () => {
 
   const [ form ] = Form.useForm();
 
-  const { settingFormOne } = useSelector((state) => state.settings);
+  const { formOne } = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
   const [ localLoading, setLocalLoading ] = useState(true);
@@ -55,8 +56,7 @@ const UserOne = () => {
     await Get('/person?filters=' + JSON.stringify({ id: id })).then((res) => {
       let data = res.data.data[0];
       data.dateBirth = moment(data.dateBirth);
-      handleReset()
-      dispatch(setSettingForm(data))
+      dispatch(setUsersForm(data))
     });
   }
 
@@ -64,7 +64,7 @@ const UserOne = () => {
     let isMounted = true;
 
     if (isMounted) {
-      if (_.isEmpty(settingFormOne) && updMode) {
+      if (_.isEmpty(formOne) && updMode) {
         getData()
       } else handleReset();
     };
@@ -89,7 +89,7 @@ const UserOne = () => {
           <Col md={24}>
             <Form
               size='small'
-              initialValues={settingFormOne}
+              initialValues={formOne}
               form={form}
               name='form_orgs'
               className="ant-advanced-search-form"
@@ -156,7 +156,7 @@ const UserOne = () => {
                         <Select >
                           {
                             DicSex.map(el => {
-                              return <Select.Option value={el.id}>{el.name}</Select.Option>
+                              return <Select.Option key={nanoid()} value={el.id}>{el.name}</Select.Option>
                             })
                           }
                         </Select>
