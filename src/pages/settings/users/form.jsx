@@ -1,4 +1,4 @@
-import { Col, Row, PageHeader, Form, Button, Input, Typography, Skeleton, Divider, InputNumber, message, DatePicker, Select } from 'antd';
+import { Col, Row, PageHeader, Form, Button, Input, Typography, Skeleton, Divider, InputNumber, message, DatePicker, Select, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -19,6 +19,7 @@ const UserOne = () => {
   const updMode = (id !== 'new') ? true : false;
 
   const [ form ] = Form.useForm();
+  const [ formAcc ] = Form.useForm();
 
   const { formOne } = useSelector((state) => state.users);
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const UserOne = () => {
   const handleBack = () => navigate(`/settings/${pagename}`);
 
   const onSaveOne = async (data) => {
-    console.log(data);
+
     data.sex ? data.sexText = (_.find(DicSex, (el) => el.id === data.sex )).short : null;
     data.dateBirth ? data.dateBirth = moment(data.dateBirth).toISOString() : null;
 
@@ -164,21 +165,55 @@ const UserOne = () => {
                     </Col>
                   </Row>
                 </Col>
+                <Col span={24} style={{ textAlign: 'left' }}>
+                  <Button type="primary" htmlType="submit">
+                    { !updMode ? 'Добавить' : 'Сохранить' }
+                  </Button>
+                </Col>
               </Row>
-              <Col span={24}>
-                <Divider />
-              </Col>
-              <Col span={24} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit">
-                  { !updMode ? 'Добавить' : 'Сохранить' }
-                </Button>
-                <Button
-                  style={{ margin: '0 8px' }}
-                  onClick={handleReset}
-                >
-                  Отменить изменения
-                </Button>
-              </Col>
+            </Form>
+            <Form
+              size='small'
+              form={formAcc}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+            >
+              <Row>
+                <Col span={24}>
+                  <Divider />
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name='uid'
+                    label='Идентификатор'
+                  >
+                    <Tag color='blue'>Не установлен</Tag>
+                  </Form.Item>
+                  <Form.Item
+                    name='organization'
+                    label='Организация'
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    name='login'
+                    label='Логин'
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    name='password'
+                    label='Пароль'
+                  >
+                    <Input type='password' />
+                  </Form.Item>
+                </Col>
+                <Col span={24} style={{ textAlign: 'left' }}>
+                  <Button type="primary" htmlType="submit">
+                    Создать аккаунт
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           </Col>
       }
