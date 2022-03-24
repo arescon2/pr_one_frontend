@@ -12,6 +12,11 @@ import 'antd/dist/antd.css';
 import './styles/index.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
+import moment from 'moment';
+import 'moment/locale/ru';
+
+moment.locale('ru')
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

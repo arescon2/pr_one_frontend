@@ -28,6 +28,9 @@ code {
 
 .body-block {
   padding: 5px 10px;
+  .ant-row.ant-form-item {
+    margin-bottom: 10px;
+  }
 }
 
 .card-root-block {

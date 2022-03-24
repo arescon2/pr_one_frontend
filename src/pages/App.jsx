@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setLogined, setLoading } from '../features/stores/mainSlice';
@@ -10,7 +10,6 @@ import LoadingPage from '../features/loadingPage';
 
 import Login from '../pages/login';
 
-import { getTokens } from '../libs';
 import { Get } from '../features/api';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -37,6 +36,7 @@ const App = () => {
       navigate('/login');
     }).finally(() => dispatch(setLoading(false)))    
   };
+
   useEffect(() => {
     checkAuth();
   }, []);
