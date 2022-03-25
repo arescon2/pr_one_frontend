@@ -1,5 +1,5 @@
-import { Col, Row, PageHeader, Form, Button, Input, Typography, Skeleton, Divider, InputNumber, message, DatePicker, Select, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { Col, Row, PageHeader, Form, Button, Input, Skeleton, message, DatePicker, Select } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { DicSex } from '../../../libs';
 
 import { Get, Post, Put } from '../../../features/api';
 import { setUsersForm } from '../../../features/stores/usersSlice';
+import AccPerson from './accaunt';
 
 const UserOne = () => {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ const UserOne = () => {
   const updMode = (id !== 'new') ? true : false;
 
   const [ form ] = Form.useForm();
-  const [ formAcc ] = Form.useForm();
 
   const { formOne } = useSelector((state) => state.users);
   const dispatch = useDispatch();
@@ -48,20 +48,21 @@ const UserOne = () => {
     }
   }
 
-  const handleReset = (data) => {
-    form.resetFields();
+  const handleReset = () => {
+    // form.resetFields();
     setLocalLoading(false);
   }
 
-  const getData = async () => {
-    await Get('/person?filters=' + JSON.stringify({ id: id })).then((res) => {
+  const getData = useCallback(() => {
+    Get('/person?filters=' + JSON.stringify({ id: id })).then((res) => {
       let data = res.data.data[0];
       data.dateBirth = moment(data.dateBirth);
-      dispatch(setUsersForm(data))
+      dispatch(setUsersForm(data));
+      handleReset();
     });
-  }
+  }, [id, setUsersForm, handleReset, moment, dispatch])
 
-  useEffect(async () => {
+  useEffect(() => {
     let isMounted = true;
 
     if (isMounted) {
@@ -70,8 +71,10 @@ const UserOne = () => {
       } else handleReset();
     };
 
-    return () => isMounted = false;
-  }, [])
+    return () => {
+      isMounted = false;
+    }
+  })
 
   return <Row >
     <Col md={24}>
@@ -109,7 +112,7 @@ const UserOne = () => {
                 : null
               }
               <Row>
-                <Col md={12}>
+                <Col md={12} sm={24} xs={24}>
                   <Row gutter={12}>
                     <Col span={24}>
                       <Form.Item
@@ -138,8 +141,6 @@ const UserOne = () => {
                       </Form.Item>
                     </Col>
                   </Row>
-                </Col>
-                <Col md={12}>
                   <Row gutter={12}>
                     <Col span={24}>
                       <Form.Item
@@ -165,56 +166,15 @@ const UserOne = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col span={24} style={{ textAlign: 'left' }}>
+                <Col md={24} sm={24} xs={24} style={{ textAlign: 'left' }}>
                   <Button type="primary" htmlType="submit">
                     { !updMode ? 'Добавить' : 'Сохранить' }
                   </Button>
                 </Col>
               </Row>
             </Form>
-            <Form
-              size='small'
-              form={formAcc}
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-            >
-              <Row>
-                <Col span={24}>
-                  <Divider />
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name='uid'
-                    label='Идентификатор'
-                  >
-                    <Tag color='blue'>Не установлен</Tag>
-                  </Form.Item>
-                  <Form.Item
-                    name='organization'
-                    label='Организация'
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    name='login'
-                    label='Логин'
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    name='password'
-                    label='Пароль'
-                  >
-                    <Input type='password' />
-                  </Form.Item>
-                </Col>
-                <Col span={24} style={{ textAlign: 'left' }}>
-                  <Button type="primary" htmlType="submit">
-                    Создать аккаунт
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+
+            <AccPerson />
           </Col>
       }
   </Row>

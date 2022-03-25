@@ -34,12 +34,14 @@ export const Put = function (url, data = {}, params = {}) {
 }
 
 export const Delete = async function (url, data = {}, params = {}) {
-	try {
-    return await instance.delete(url, {
+  return new Promise((resolve, reject) => {
+    instance.delete(url, {
       data: data,
       params: params
+    }).then( result => {
+      resolve(result.data, result)
+    }).catch( error => {
+      reject(error.response.data, error.response)
     });
-  } catch (err) {
-    throw new Error(err);
-  }
+  });
 }

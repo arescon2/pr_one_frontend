@@ -76,3 +76,14 @@ code {
   padding: 0;
   margin-bottom: 20px;
 }
+
+.dic-select {
+  height: 240px;
+  overflow: scroll;
+}
+
+.item-select-dic:hover {
+  cursor: pointer;
+  background-color: #1890ff;
+  color: white;
+}

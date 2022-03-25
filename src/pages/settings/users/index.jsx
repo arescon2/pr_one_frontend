@@ -22,8 +22,10 @@ const UserList = () => {
 
   const handleDelete = (item) => {
     Delete(`/person?id=${item.id}`).then((result) => {
-      message.success(`Организация "${item.name}" удалена`);
+      message.success(`Пользователь удален`);
       getData();
+    }).catch( error => {
+      message.error(error.data)
     });
   };
 
@@ -69,9 +71,9 @@ const UserList = () => {
     console.log(args)
   };
 
-  const handleOpenForm = (data) => {
+  const handleOpenForm = (data = {}) => {
     let item = {...data}
-    if (item === 'new') {
+    if (_.isEmpty(item)) {
       dispatch(setUsersForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
@@ -111,7 +113,7 @@ const UserList = () => {
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Новый пользователь</Button>,
+            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm()}>Новый пользователь</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />
