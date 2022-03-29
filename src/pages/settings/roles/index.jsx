@@ -5,27 +5,27 @@ import { Col, Row, Button, Popover, PageHeader, message, Pagination } from 'antd
 
 import moment from 'moment';
 
-import _ from 'lodash';
-
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Delete, Get } from '../../../features/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsersList, setUsersPagin, setUsersForm } from '../../../features/stores/usersSlice';
+import { setRolesList, setRolesForm, setRolesPagin } from '../../../features/stores/rolesSlice';
 
-const UserList = () => {
+const apiUrl = 'role';
+
+const RolesList = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
 
-  const { list, total, pagination } = useSelector((state) => state.users);
+  const { list, total, pagination } = useSelector((state) => state.roles );
   const dispatch = useDispatch();
 
   const handleDelete = (item) => {
-    Delete(`/person?id=${item.id}`).then((result) => {
-      message.success(`Пользователь удален`);
+    Delete(`/${apiUrl}?id=${item.id}`).then((result) => {
+      message.success(`Организация "${item.name}" удалена`);
       getData();
-    }).catch( error => {
-      message.error('Ошибка. Удалите аккаунт пользователя.')
+    }).catch(err => {
+      message.error(err.data);
     });
   };
 
@@ -36,17 +36,18 @@ const UserList = () => {
       width: '100px'
     },
     {
-      name: 'ФИО',
-      selector: row => `${row.fam} ${row.im} ${row.otch ? row.otch : ''}`,
+      name: 'Название',
+      selector: row => row.title,
       grow: 2
     },
     {
-      name: 'ДР',
-      selector: row => row.dateBirth && moment(row.dateBirth).format('DD-MM-YYYY'),
+      name: 'Код',
+      selector: row => row.name,
+      grow: 2
     },
     {
       name: 'Дата создания',
-      selector: row => row.dateBirth && moment(row.dateCreate).format('DD-MM-YYYY'),
+      selector: row => moment(row.dateCreate).format('DD-MM-YYYY'),
     },
     {
       name: 'Действия',
@@ -71,14 +72,12 @@ const UserList = () => {
     console.log(args)
   };
 
-  const handleOpenForm = (data = {}) => {
-    let item = {...data}
-    if (_.isEmpty(item)) {
-      dispatch(setUsersForm({}))
+  const handleOpenForm = (item) => {
+    if (item === 'new') {
+      dispatch(setRolesForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
-      item.dateBirth = moment(item.dateBirth);
-      dispatch(setUsersForm(item))
+      dispatch(setRolesForm(item))
       navigate(`/settings/${pagename}/${item.id}`);
     }
   };
@@ -87,33 +86,37 @@ const UserList = () => {
 
   const getData = async (first) => {
     first ? null : message.loading({ content: 'Обновление...', key: 'loading' });
-    await Get('/person', pagination).then((res) => {
+    await Get(`/${apiUrl}`, pagination).then((res) => {
+      dispatch(setRolesList(res.data));
       first ? null : message.success({ content: 'Обновлено', key: 'loading' });
-      dispatch(setUsersList(res.data));
     });
   };
 
   const onShowSizeChange = (curPage, newSize) => {
-    dispatch(setUsersPagin({ size: newSize, page: curPage }));
+    dispatch(setRolesPagin({ size: newSize, page: curPage }));
   }
 
   const onChangePage = (page, size) => {
-    dispatch(setUsersPagin({ page: page }))
+    dispatch(setRolesPagin({ page: page }))
   }
 
   useEffect(() => {
     getData(true);
   }, []);
 
+  useEffect(() => {
+    getData(true);
+  }, [pagination]);
+
   return <Row>
     <Col md={24}>
       <div className='wrapper-tab'>
         <PageHeader
-          title='Пользователи'
+          title='Роли и доступ'
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm()}>Новый пользователь</Button>,
+            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}> Роль</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />
@@ -144,4 +147,4 @@ const UserList = () => {
   </Row>
 };
 
-export default UserList;
+export default RolesList;

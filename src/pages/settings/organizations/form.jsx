@@ -48,7 +48,7 @@ const OrgsOne = () => {
     await Get('/organization?filters=' + JSON.stringify({ id: id })).then((res) => {
       const data = res.data.data[0];
       handleReset()
-      dispatch(setOrgsForm(data))
+      dispatch(setOrgsForm(data || {}))
     });
   }
 

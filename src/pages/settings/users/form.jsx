@@ -1,4 +1,4 @@
-import { Col, Row, PageHeader, Form, Button, Input, Skeleton, message, DatePicker, Select } from 'antd';
+import { Col, Row, PageHeader, Form, Button, Input, Skeleton, message, DatePicker, Select, Divider, Typography } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { DicSex } from '../../../libs';
 import { Get, Post, Put } from '../../../features/api';
 import { setUsersForm } from '../../../features/stores/usersSlice';
 import AccPerson from './accaunt';
+import RolesAccaunt from './roles';
 
 const UserOne = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const UserOne = () => {
       });
     } else {
       await Post('/person', data).then((res) => {
-        message.success('Организация добавлена');
+        message.success('Пользователь создан');
         handleReset();
         handleBack();
       }).catch(error => {
@@ -173,8 +174,22 @@ const UserOne = () => {
                 </Col>
               </Row>
             </Form>
-
-            <AccPerson />
+            <Row gutter={8}>
+              <Col md={12} sm={24} xs={24}>
+                <Col span={24}>
+                  <Divider />
+                  <Typography.Title level={4}>Аккаунт</Typography.Title>
+                </Col>
+                <AccPerson />
+              </Col>
+              <Col md={12} sm={24} xs={24}>
+                <Col span={24}>
+                  <Divider />
+                  <Typography.Title level={4}>Роли</Typography.Title>
+                </Col>
+                <RolesAccaunt />
+              </Col>
+            </Row>
           </Col>
       }
   </Row>

@@ -24,13 +24,27 @@ export const Post = async function (url, data = {}, params = {}) {
       instance.post(url, data, { params }).then( result => {
         resolve(result.data, result)
       }).catch( error => {
-        reject(error.response.data, error.response)
+        let erData = error.response.data;
+        if (_.isArray(erData.message)) {
+          erData.message = erData.message.map(el => el)
+        }
+        reject(erData, error.response)
       });
     });
 };
 
-export const Put = function (url, data = {}, params = {}) {
-	return instance.put(url, data, { params });
+export const Put = async function (url, data = {}, params = {}) {
+	return new Promise((resolve, reject) => {
+    instance.put(url, data, { params }).then( result => {
+      resolve(result.data, result)
+    }).catch( error => {
+      let erData = error.response.data;
+      if (_.isArray(erData.message)) {
+        erData.message = erData.message.map(el => el)
+      }
+      reject(error.response.data, error.response)
+    });
+  });
 }
 
 export const Delete = async function (url, data = {}, params = {}) {
@@ -41,6 +55,10 @@ export const Delete = async function (url, data = {}, params = {}) {
     }).then( result => {
       resolve(result.data, result)
     }).catch( error => {
+      let erData = error.response.data;
+      if (_.isArray(erData.message)) {
+        erData.message = erData.message.map(el => el)
+      }
       reject(error.response.data, error.response)
     });
   });

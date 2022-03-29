@@ -9,6 +9,8 @@ import UserList from './users';
 import UserOne from './users/form';
 
 import _ from 'lodash';
+import RolesList from './roles';
+import AccessList from './roles/accesses';
 
 const Settings = () => {
   const { pagename, id } = useParams();
@@ -32,11 +34,20 @@ const Settings = () => {
       key: 'Organizations',
       list: <OrgsList />,
       form: <OrgsOne />
+    },
+    {
+      id: 3,
+      text: 'Роли и доступ',
+      placeholder: 'Роли и доступ',
+      linkto: 'roles',
+      key: 'Roles',
+      list: <RolesList />,
+      form: <AccessList />
     }
   ]
 
   const handleGoLink = (item) => {
-    navigate(`/settings/${item.key}`);
+    pagename !== item.key && navigate(`/settings/${item.key}`);
   };
 
   useEffect(() => {
