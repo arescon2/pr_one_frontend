@@ -26,9 +26,12 @@ const App = () => {
   const location = useLocation();
 
   const checkAuth = async () => {
-    await Get('/auth/check').then(() => {
+    await Get('/auth/check').then((res) => {
       // logined
-      dispatch(setLogined(true));
+      dispatch(setLogined({
+        status: true,
+        user: res.data.data
+      }));
       if(location.pathname === '/login') navigate('/');
     }).catch( error => {
           // not logined

@@ -11,10 +11,13 @@ import UserOne from './users/form';
 import _ from 'lodash';
 import RolesList from './roles';
 import AccessList from './roles/accesses';
+import { useSelector } from 'react-redux';
 
 const Settings = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.main)
 
   const listMenu = [
     {
@@ -23,6 +26,7 @@ const Settings = () => {
       placeholder: 'Пользователи',
       linkto: 'users',
       key: 'Users',
+      roles: 'ALL',
       list: <UserList />,
       form: <UserOne />
     },
@@ -32,6 +36,7 @@ const Settings = () => {
       placeholder: 'Организации',
       linkto: 'organizations',
       key: 'Organizations',
+      roles: 'DEVELOP',
       list: <OrgsList />,
       form: <OrgsOne />
     },
@@ -41,6 +46,7 @@ const Settings = () => {
       placeholder: 'Роли и доступ',
       linkto: 'roles',
       key: 'Roles',
+      roles: 'DEVELOP',
       list: <RolesList />,
       form: <AccessList />
     }
@@ -60,8 +66,16 @@ const Settings = () => {
     <Layout.Sider theme='light'>
       <Menu onClick={handleGoLink} selectedKeys={[pagename]} mode='vertical'>
         {
-          listMenu.map(el => {
-            return <Menu.Item key={el.linkto}>{ el.text }</Menu.Item>
+          listMenu.map(elMenu => {
+            let show = false;
+            if (_.includes(elMenu.roles, 'ALL')) {
+              show = true;
+            } else {
+              user.roles.forEach( role => {
+                show = _.includes(elMenu.roles, role.name)
+              });
+            }
+            return show ? <Menu.Item key={elMenu.linkto}>{ elMenu.text }</Menu.Item> : null;
           })
         }
       </Menu>
@@ -69,7 +83,19 @@ const Settings = () => {
     <Layout.Content className='wrapper'>
       {
         (() => {
-          const curMenu = _.find(listMenu, el => el.linkto === pagename);
+          const curMenu = _.find(listMenu, elMenu => {
+            if (elMenu.linkto === pagename) {
+              let show = false;
+              if (_.includes(elMenu.roles, 'ALL')) {
+                show = true;
+              } else {
+                user.roles.forEach( role => {
+                  show = _.includes(elMenu.roles, role.name)
+                });
+              }
+              return show ? elMenu : null;
+            }
+          });
 
           return curMenu ? id ? curMenu.form : curMenu.list : null
         })()

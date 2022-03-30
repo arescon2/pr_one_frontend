@@ -9,10 +9,11 @@ import { nanoid } from 'nanoid';
 
 import { DicSex } from '../../../libs';
 
-import { Get, Post, Put } from '../../../features/api';
+import { Get, isDevelop, Post, Put } from '../../../features/api';
 import { setUsersForm } from '../../../features/stores/usersSlice';
 import AccPerson from './accaunt';
 import RolesAccaunt from './roles';
+import SelectApi from '../../../features/comps/selectApi';
 
 const UserOne = () => {
   const navigate = useNavigate();
@@ -23,9 +24,11 @@ const UserOne = () => {
   const [ form ] = Form.useForm();
 
   const { formOne } = useSelector((state) => state.users);
+  const { user } = useSelector((state) => state.main);
   const dispatch = useDispatch();
 
   const [ localLoading, setLocalLoading ] = useState(true);
+  const [ sended, setSended ] = useState(false);
 
   const handleBack = () => navigate(`/settings/${pagename}`);
 
@@ -33,6 +36,8 @@ const UserOne = () => {
 
     data.sex ? data.sexText = (_.find(DicSex, (el) => el.id === data.sex )).short : null;
     data.dateBirth ? data.dateBirth = moment(data.dateBirth).toISOString() : null;
+
+    setSended(true);
 
     if (updMode) {
       await Put('/person', data).then((res) => {
@@ -42,11 +47,12 @@ const UserOne = () => {
       await Post('/person', data).then((res) => {
         message.success('Пользователь создан');
         handleReset();
-        handleBack();
+        navigate(`/settings/${pagename}/${res.id}`);
       }).catch(error => {
         message.error('Ошибка: ' + error.message)
       });
     }
+    setSended(false);
   }
 
   const handleReset = () => {
@@ -57,7 +63,7 @@ const UserOne = () => {
   const getData = useCallback(() => {
     Get('/person?filters=' + JSON.stringify({ id: id })).then((res) => {
       let data = res.data.data[0];
-      data.dateBirth = moment(data.dateBirth);
+      data.dateBirth ? data.dateBirth = moment(data.dateBirth) : null
       dispatch(setUsersForm(data));
       handleReset();
     });
@@ -75,7 +81,7 @@ const UserOne = () => {
     return () => {
       isMounted = false;
     }
-  })
+  });
 
   return <Row >
     <Col md={24}>
@@ -163,6 +169,16 @@ const UserOne = () => {
                             })
                           }
                         </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Divider />
+                      <Form.Item
+                        hidden={!isDevelop(user.roles)}
+                        name='organization'
+                        label='Организация'
+                        >
+                        <SelectApi type='organization' />
                       </Form.Item>
                     </Col>
                   </Row>

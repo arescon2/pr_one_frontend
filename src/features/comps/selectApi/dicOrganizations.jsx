@@ -1,4 +1,5 @@
-import { Button, Card, Divider, Input, List, Modal, Typography } from "antd";
+import { Button, Card, Divider, Input, List, Modal, Tooltip, Typography } from "antd";
+import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { Get } from "../../api";
 
@@ -48,7 +49,9 @@ const DicOrganizations = ({ value, onChange }) => {
 
   
   return <>
-    <Search onSearch={onOpen} value={selected.name} placeholder="input search loading with enterButton" />
+    <Tooltip placement='bottomLeft' title={selected.name}>
+      <Search onSearch={onOpen} value={selected.short} placeholder="input search loading with enterButton" />
+    </Tooltip>
     <Modal title="Выбор организации" visible={isOpenModal} onCancel={onCloseModal} footer={false}>
       <label>Введите название организации</label>
       <Search
@@ -64,9 +67,11 @@ const DicOrganizations = ({ value, onChange }) => {
           size="small"
           dataSource={dataList}
           renderItem={item => {
-            return <List.Item className="item-select-dic" onClick={() => handleChange(item)}>
-              {item.id} - {item.name}
-            </List.Item>
+            return <Tooltip key={nanoid()} placement='bottomLeft' title={selected.name}>
+              <List.Item className="item-select-dic" onClick={() => handleChange(item)}>
+                {item.id} - {item.short}
+              </List.Item>
+            </Tooltip>
           }}
         />
       </Card>

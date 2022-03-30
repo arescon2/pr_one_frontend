@@ -2,13 +2,14 @@ import { Col, Row, Form, Button, Input, Divider, Tag, Skeleton, Typography, mess
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Get, Post, Put } from '../../../features/api';
-import SelectApi from '../../../features/comps/selectApi';
 
 const AccPerson = () => {
   const [ form ] = Form.useForm();
 
   const [accaunt, setAccaunt] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const [sended, setSended] = useState(false)
 
   const { id } = useParams();
 
@@ -18,11 +19,12 @@ const AccPerson = () => {
       login: values.login,
       email: values.email,
       organization: values.organization,
-    }
+    };
+
+    setSended(true);
 
     if (accaunt.id) {
       await Put('/accaunt?id='+accaunt.id, data).then((res) => {
-        console.log('asdasd');
         message.success('Изменения сохранены');
       });
     } else {
@@ -30,12 +32,14 @@ const AccPerson = () => {
       data.password = values.password;
 
       await Post('/accaunt', data).then((res) => {
+        setAccaunt(res.data);
         message.success('Аккаунт создан');
-        handleBack();
       }).catch(error => {
-        message.error('Ошибка: ' + error.message)
+        message.error('Ошибка: ' + JSON.stringify(error.message))
       });
     }
+    form.resetFields();
+    setSended(false);
   }
 
   const onChangeActive = async () => {
@@ -55,8 +59,8 @@ const AccPerson = () => {
         setAccaunt(data || {});
         setLoading(false);
       });
-    } else setLoading(false);
-  }, [id, setAccaunt]);
+    }
+  }, [id]);
 
   return loading ? <Col md={24}>
       <Skeleton active />
@@ -84,12 +88,6 @@ const AccPerson = () => {
             { accaunt.uid ? <Tag color='green'>{accaunt.uid}</Tag> : <Tag color='blue'>Не установлен</Tag>}
           </Form.Item>
           <Form.Item
-            name='organization'
-            label='Организация'
-          >
-            <SelectApi type='organization' />
-          </Form.Item>
-          <Form.Item
             name='email'
             label='Электронная почта'
           >
@@ -109,7 +107,7 @@ const AccPerson = () => {
             <Input hidden={accaunt.uid ? true : false} autoComplete='new-password' type='password' />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={sended}>
             { accaunt.uid ? 'Сохранить' : 'Создать аккаунт' }
           </Button>
           {

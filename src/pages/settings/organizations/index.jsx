@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Col, Row, Button, Popover, PageHeader, message, Pagination } from 'antd';
+import { Col, Row, Button, Popover, PageHeader, message, Pagination, Tooltip } from 'antd';
 
 import moment from 'moment';
 
@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Delete, Get } from '../../../features/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOrgsList, setOrgsForm, setOrgsPagin } from '../../../features/stores/orgsSlice';
+
+import Paragraph from 'antd/lib/typography/Paragraph';
 
 const OrgsList = () => {
   const { pagename, id } = useParams();
@@ -29,12 +31,17 @@ const OrgsList = () => {
     {
       name: '#',
       selector: row => row.id,
-      width: '100px'
+      width: '80px'
     },
     {
       name: 'Название',
-      selector: row => row.name,
-      grow: 2
+      selector: row => <Tooltip placement="topLeft" title={row.name}>{row.name}</Tooltip>,
+      width: '200px',
+    },
+    {
+      name: 'Короткое название',
+      selector: row => <Tooltip placement="topLeft" title={row.short}>{row.short}</Tooltip>,
+      width: '200px',
     },
     {
       name: 'ИНН',
@@ -95,9 +102,9 @@ const OrgsList = () => {
     dispatch(setOrgsPagin({ page: page }))
   }
 
-  useEffect(() => {
-    getData(true);
-  }, []);
+  // useEffect(() => {
+  //   getData(true);
+  // }, []);
 
   useEffect(() => {
     getData(true);

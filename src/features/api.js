@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import _ from 'lodash';
+
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
 	timeout: 60000,
@@ -62,4 +64,9 @@ export const Delete = async function (url, data = {}, params = {}) {
       reject(error.response.data, error.response)
     });
   });
+}
+
+export const isDevelop = (roles) => {
+  const isDev = _.filter(roles, (role) => role.name === 'DEVELOP');
+  return isDev.length > 0;
 }

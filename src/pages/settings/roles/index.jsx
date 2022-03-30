@@ -33,7 +33,7 @@ const RolesList = () => {
     {
       name: '#',
       selector: row => row.id,
-      width: '100px'
+      width: '50px'
     },
     {
       name: 'Название',

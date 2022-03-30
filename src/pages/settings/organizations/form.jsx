@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 import { Get, Post, Put } from '../../../features/api';
 import { setOrgsForm } from '../../../features/stores/orgsSlice';
+import TextArea from 'antd/lib/input/TextArea';
 
 
 const OrgsOne = () => {
@@ -106,6 +107,15 @@ const OrgsOne = () => {
                       <Form.Item
                         name='name'
                         label='Название'
+                        rules={[{ required: true }]}
+                      >
+                        <TextArea />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        name='short'
+                        label='Сокращение'
                         rules={[{ required: true }]}
                       >
                         <Input />

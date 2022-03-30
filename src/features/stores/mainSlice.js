@@ -1,9 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+
+import _ from 'lodash';
 
 const initialState = {
   loadingGlobal: true,
   mainMenu: [],
-  logined: false
+  logined: false,
+  user: {}
 }
 
 export const mainSlice = createSlice({
@@ -14,7 +17,14 @@ export const mainSlice = createSlice({
       state.mainMenu = [...action.payload]
     },
     setLogined: (state, action) => {
-      state.logined = action.payload;
+      let status = action.payload;
+      let user = {};
+      if (_.isObject(action.payload)) {
+        status = action.payload.status;
+        user = action.payload.user;
+      }
+      state.logined = status;
+      state.user = user;
     },
     setLoading: (state, action) => {
       state.loadingGlobal = action.payload;

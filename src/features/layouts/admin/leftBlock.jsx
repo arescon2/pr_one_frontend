@@ -1,17 +1,22 @@
 import { useNavigate } from 'react-router-dom';
+import _ from 'lodash';
 
 import { Menu } from 'antd';
 import { nanoid } from 'nanoid';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelector } from 'react-redux';
 
 const LeftBlock = () => {
-  let data = [
+  const user = useSelector((store) => store.main.user);
+
+  const data = [
     {
       id: 1,
       icon: 'home',
       title: 'Главная страница',
       placeholder: 'Главная страница',
+      roles: ['ALL'],
       link: '/'
     },
     {
@@ -19,6 +24,7 @@ const LeftBlock = () => {
       icon: 'clipboard-list',
       title: 'Тикеты',
       placeholder: 'Тикеты',
+      roles: ['ALL'],
       link: '/page/tickets'
     },
     {
@@ -26,6 +32,7 @@ const LeftBlock = () => {
       icon: 'cog',
       title: 'Настройки',
       placeholder: 'Настройки',
+      roles: ['DEVELOP'],
       link: '/settings'
     }
   ];

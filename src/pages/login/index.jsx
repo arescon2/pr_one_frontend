@@ -23,9 +23,12 @@ const Login = () => {
   };
 
   const handlerGo = () => {
-    Post('/auth/login', { login, password }).then( () => {
+    Post('/auth/login', { login, password }).then((res) => {
       navigate('/');
-      dispatch(setLogined(true));
+      dispatch(setLogined({
+        status: true,
+        user: res.data
+      }));
       dispatch(setLoading(false));
     }).catch( error => {
       setErrors(error.message || []);

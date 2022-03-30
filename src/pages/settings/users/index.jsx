@@ -42,11 +42,11 @@ const UserList = () => {
     },
     {
       name: 'ДР',
-      selector: row => row.dateBirth && moment(row.dateBirth).format('DD-MM-YYYY'),
+      selector: row => row.dateBirth ? moment(row.dateBirth).format('DD-MM-YYYY') : null,
     },
     {
       name: 'Дата создания',
-      selector: row => row.dateBirth && moment(row.dateCreate).format('DD-MM-YYYY'),
+      selector: row => row.dateCreate ? moment(row.dateCreate).format('DD-MM-YYYY') : null,
     },
     {
       name: 'Действия',
@@ -77,7 +77,7 @@ const UserList = () => {
       dispatch(setUsersForm({}))
       navigate(`/settings/${pagename}/new`);
     } else {
-      item.dateBirth = moment(item.dateBirth);
+      item.dateBirth ? item.dateBirth = moment(item.dateBirth) : null;
       dispatch(setUsersForm(item))
       navigate(`/settings/${pagename}/${item.id}`);
     }
@@ -101,9 +101,13 @@ const UserList = () => {
     dispatch(setUsersPagin({ page: page }))
   }
 
+  // useEffect(() => {
+  //   getData(true);
+  // }, []);
+
   useEffect(() => {
     getData(true);
-  }, []);
+  }, [pagination]);
 
   return <Row>
     <Col md={24}>
