@@ -12,6 +12,7 @@ import _ from 'lodash';
 import RolesList from './roles';
 import AccessList from './roles/accesses';
 import { useSelector } from 'react-redux';
+import OtdelsList from './otdels';
 
 const Settings = () => {
   const { pagename, id } = useParams();
@@ -26,7 +27,7 @@ const Settings = () => {
       placeholder: 'Пользователи',
       linkto: 'users',
       key: 'Users',
-      roles: 'ALL',
+      roles: ['ALL'],
       list: <UserList />,
       form: <UserOne />
     },
@@ -36,17 +37,27 @@ const Settings = () => {
       placeholder: 'Организации',
       linkto: 'organizations',
       key: 'Organizations',
-      roles: 'DEVELOP',
+      roles: ['DEVELOP'],
       list: <OrgsList />,
       form: <OrgsOne />
     },
     {
       id: 3,
+      text: 'Отделы организации',
+      placeholder: 'Отделы организации',
+      linkto: 'otdels',
+      key: 'otdels',
+      roles: ['ALL'],
+      list: <OtdelsList />,
+      form: <OrgsOne />
+    },
+    {
+      id: 10,
       text: 'Роли и доступ',
       placeholder: 'Роли и доступ',
       linkto: 'roles',
       key: 'Roles',
-      roles: 'DEVELOP',
+      roles: ['DEVELOP'],
       list: <RolesList />,
       form: <AccessList />
     }
@@ -60,22 +71,20 @@ const Settings = () => {
     if (!pagename) {
       navigate(`/settings/${listMenu[0].linkto}`);
     }
-  }, [])
+  }, []);
+
+
+  const isShow = (elMenu) => {
+    if (_.includes(elMenu.roles, 'ALL')) return true;
+      else return user.roles.some( uRole => _.includes(elMenu.roles, uRole.name));
+  }
 
   return <Layout className='wrapper'>
     <Layout.Sider theme='light'>
       <Menu onClick={handleGoLink} selectedKeys={[pagename]} mode='vertical'>
         {
           listMenu.map(elMenu => {
-            let show = false;
-            if (_.includes(elMenu.roles, 'ALL')) {
-              show = true;
-            } else {
-              user.roles.forEach( role => {
-                show = _.includes(elMenu.roles, role.name)
-              });
-            }
-            return show ? <Menu.Item key={elMenu.linkto}>{ elMenu.text }</Menu.Item> : null;
+            return isShow(elMenu) ? <Menu.Item key={elMenu.linkto}>{ elMenu.text }</Menu.Item> : null;
           })
         }
       </Menu>
@@ -85,15 +94,7 @@ const Settings = () => {
         (() => {
           const curMenu = _.find(listMenu, elMenu => {
             if (elMenu.linkto === pagename) {
-              let show = false;
-              if (_.includes(elMenu.roles, 'ALL')) {
-                show = true;
-              } else {
-                user.roles.forEach( role => {
-                  show = _.includes(elMenu.roles, role.name)
-                });
-              }
-              return show ? elMenu : null;
+              return isShow(elMenu) ? elMenu : null;
             }
           });
 

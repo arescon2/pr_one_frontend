@@ -8,15 +8,15 @@ import AdminLayout from '../features/layouts/admin';
 
 import LoadingPage from '../features/loadingPage';
 
-import Login from '../pages/login';
+import Login from '../pages/views/login';
 
 import { Get } from '../features/api';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus, faAddressBook } from '@fortawesome/free-solid-svg-icons'
 import RoutesBlock from './routes';
 
-library.add(faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus);
+library.add(faCog, faHome, faClipboardList, faTrash, faEdit, faSync, faPlus, faAddressBook);
 
 const App = () => {
   const navigate = useNavigate();

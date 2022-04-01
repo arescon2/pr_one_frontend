@@ -24,14 +24,14 @@ const Header = () => {
   }
   
   const handleAdd = () => {
-    navigate('/page/new_ticket');
+    navigate('/tickets/new');
   }
 
   const handleGoCabinet = () => navigate('/user-cabinet');
 
   return (
     <div className='header-block'>
-      <Button icon={<FontAwesomeIcon icon={faPlus} />} type='text' ></Button>
+      <Button onClick={handleAdd} icon={<FontAwesomeIcon icon={faPlus} />} type='text' ></Button>
       <div className='user-block'>
         <Button icon={<FontAwesomeIcon icon={faUserCog} />} type='text' onClick={handleGoCabinet} ></Button>
         <Button icon={<FontAwesomeIcon icon={faBell} />} type='text' ></Button>

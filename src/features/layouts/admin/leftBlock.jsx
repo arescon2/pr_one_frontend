@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 
-import { Menu } from 'antd';
+import { Menu, Tooltip } from 'antd';
 import { nanoid } from 'nanoid';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,14 +21,22 @@ const LeftBlock = () => {
     },
     {
       id: 2,
-      icon: 'clipboard-list',
-      title: 'Тикеты',
-      placeholder: 'Тикеты',
+      icon: 'address-book',
+      title: 'Справочник контактный',
+      placeholder: 'Справочник контактный',
       roles: ['ALL'],
-      link: '/page/tickets'
+      link: '/dictionary'
     },
     {
       id: 3,
+      icon: 'clipboard-list',
+      title: 'Тикеты',
+      placeholder: 'Тикеты',
+      roles: ['DEVELOP'],
+      link: '/page/tickets'
+    },
+    {
+      id: 999,
       icon: 'cog',
       title: 'Настройки',
       placeholder: 'Настройки',
@@ -46,13 +54,15 @@ const LeftBlock = () => {
   const MenuItemsCreator = () => {
     return data.map( elMenu => {
       return <Menu.Item
-        key={nanoid()}
-        style={{ paddingLeft: 'none' }}
-        placeholder={elMenu.placeholder}
-        onClick={() => handlerGoLink(elMenu)}
-      >
-        <FontAwesomeIcon style={{ width: '100%' }} size='lg' icon={elMenu.icon} />
-      </Menu.Item>
+          key={nanoid()}
+          style={{ paddingLeft: 'none' }}
+          placeholder={elMenu.placeholder}
+          onClick={() => handlerGoLink(elMenu)}
+        >
+          <Tooltip placement='right' title={elMenu.title}>
+            <FontAwesomeIcon style={{ width: '100%' }} size='lg' icon={elMenu.icon} />
+          </Tooltip>
+        </Menu.Item>
     })
   };
 

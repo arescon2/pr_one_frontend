@@ -133,20 +133,20 @@ const AccessList = () => {
       <Divider />
     </Col>
   </Row>,
-  <Row key='f2'>
-    <Col md={24}>
-      <Typography.Title level={4}>
-        Доступы
-      </Typography.Title>
-    </Col>
-    <Col span={24}>
-      <DataTable
-        data={accesses}
-        columns={columns}
-        dense
-      />
-    </Col>
-  </Row>
+  // <Row key='f2'>
+  //   <Col md={24}>
+  //     <Typography.Title level={4}>
+  //       Доступы
+  //     </Typography.Title>
+  //   </Col>
+  //   <Col span={24}>
+  //     <DataTable
+  //       data={accesses}
+  //       columns={columns}
+  //       dense
+  //     />
+  //   </Col>
+  // </Row>
   ]
 };
 

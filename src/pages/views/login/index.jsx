@@ -6,8 +6,8 @@ import './style.scss';
 
 import { Row, Col, Alert, Button, Input } from 'antd';
 
-import { Post } from '../../features/api';
-import { setLoading, setLogined } from '../../features/stores/mainSlice';
+import { Post } from '../../../features/api';
+import { setLoading, setLogined } from '../../../features/stores/mainSlice';
 
 const Login = () => {
   const navigate = useNavigate();

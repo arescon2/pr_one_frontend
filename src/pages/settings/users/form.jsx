@@ -190,22 +190,7 @@ const UserOne = () => {
                 </Col>
               </Row>
             </Form>
-            <Row gutter={8}>
-              <Col md={12} sm={24} xs={24}>
-                <Col span={24}>
-                  <Divider />
-                  <Typography.Title level={4}>Аккаунт</Typography.Title>
-                </Col>
-                <AccPerson />
-              </Col>
-              <Col md={12} sm={24} xs={24}>
-                <Col span={24}>
-                  <Divider />
-                  <Typography.Title level={4}>Роли</Typography.Title>
-                </Col>
-                <RolesAccaunt />
-              </Col>
-            </Row>
+            <AccPerson />
           </Col>
       }
   </Row>
