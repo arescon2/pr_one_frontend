@@ -13,6 +13,7 @@ import RolesList from './roles';
 import AccessList from './roles/accesses';
 import { useSelector } from 'react-redux';
 import OtdelsList from './otdels';
+import OtdelOne from './otdels/form';
 
 const Settings = () => {
   const { pagename, id } = useParams();
@@ -49,7 +50,7 @@ const Settings = () => {
       key: 'otdels',
       roles: ['ALL'],
       list: <OtdelsList />,
-      form: <OrgsOne />
+      form: <OtdelOne />
     },
     {
       id: 10,

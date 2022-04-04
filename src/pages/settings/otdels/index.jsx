@@ -37,17 +37,9 @@ const OtdelsList = () => {
       width: '200px',
     },
     {
-      name: 'Короткое название',
-      selector: row => <Tooltip placement="topLeft" title={row.short}>{row.short}</Tooltip>,
+      name: 'Организация',
+      selector: row => <Tooltip placement="topLeft" title={row.organization ? row.organization.name : ''}>{row.organization ? row.organization.name : ''}</Tooltip>,
       width: '200px',
-    },
-    {
-      name: 'ИНН',
-      selector: row => row.inn,
-    },
-    {
-      name: 'Дата создания',
-      selector: row => moment(row.dateCreate).format('DD-MM-YYYY'),
     },
     {
       name: 'Действия',
@@ -86,7 +78,7 @@ const OtdelsList = () => {
 
   const getData = async (first) => {
     first ? null : message.loading({ content: 'Обновление...', key: 'loading' });
-    await Get('/organization', pagination).then((res) => {
+    await Get('/otdels', pagination).then((res) => {
       dispatch(setOrgsList(res.data));
       first ? null : message.success({ content: 'Обновлено', key: 'loading' });
     });

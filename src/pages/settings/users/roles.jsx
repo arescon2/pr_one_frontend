@@ -29,6 +29,7 @@ const RolesAccaunt = ({ accaunt }) => {
   }
 
   const handleSaveRoles = () => {
+    console.log(accaunt)
     Put(`/accaunt?id=${accaunt.id}`, {
       roles: personRoles
     }).then((res) => {

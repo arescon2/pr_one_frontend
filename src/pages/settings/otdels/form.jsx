@@ -10,7 +10,7 @@ import { setOrgsForm } from '../../../features/stores/orgsSlice';
 import TextArea from 'antd/lib/input/TextArea';
 
 
-const OrgsOne = () => {
+const OtdelOne = () => {
   const navigate = useNavigate();
   const { pagename, id } = useParams();
 
@@ -27,12 +27,12 @@ const OrgsOne = () => {
 
   const onSaveOne = async (data) => {
     if (updMode) {
-      await Put('/organization', data).then((res) => {
+      await Put('/otdels', data).then((res) => {
         message.success('Изменения сохранены');
       });
     } else {
-      await Post('/organization', data).then((res) => {
-        message.success('Организация добавлена');
+      await Post('/otdels', data).then((res) => {
+        message.success('Отдел добавлена');
         handleBack();
       }).catch(error => {
         message.error('Ошибка: ' + error.message)
@@ -46,7 +46,7 @@ const OrgsOne = () => {
   }
 
   const getData = async () => {
-    await Get('/organization?filters=' + JSON.stringify({ id: id })).then((res) => {
+    await Get('/otdels?filters=' + JSON.stringify({ id: id })).then((res) => {
       const data = res.data.data[0];
       handleReset()
       dispatch(setOrgsForm(data || {}))
@@ -69,7 +69,7 @@ const OrgsOne = () => {
     <Col md={24}>
       <div className='wrapper-tab'>
         <PageHeader
-          title='Организация'
+          title='Отдел'
           subTitle={id !== 'new' ? 'Редактирование' : 'Новый'}
           onBack={handleBack}
         />
@@ -109,75 +109,10 @@ const OrgsOne = () => {
                         label='Название'
                         rules={[{ required: true }]}
                       >
-                        <TextArea />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        name='short'
-                        label='Сокращение'
-                        rules={[{ required: true }]}
-                      >
                         <Input />
                       </Form.Item>
                     </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        name='inn'
-                        label='ИНН'
-                        rules={[{ required: true }]}
-                      >
-                        <InputNumber style={{ width: '100%' }} disabled={updMode} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        name='ogrn'
-                        label='ОГРН'
-                      >
-                        <InputNumber style={{ width: '100%' }} disabled={updMode} />
-                      </Form.Item>
-                    </Col>
                   </Row>
-                </Col>
-                <Col md={12}>
-                  <Row gutter={12}>
-                    <Col span={24}>
-                      <Form.Item
-                        name='address'
-                        label='Адрес'
-                      >
-                        <Input />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        name='index'
-                        label='Индекс'
-                      >
-                        <InputNumber style={{ width: '100%' }} type='number' />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col span={24}>
-                  <Divider />
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name='tel'
-                    label='Телефон'
-                  >
-                    <InputNumber style={{ width: '100%' }} type='tel' />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name='email'
-                    label='Эл.Почта'
-                  >
-                    <Input type='email' />
-                  </Form.Item>
                 </Col>
               </Row>
               <Col span={24}>
@@ -201,4 +136,4 @@ const OrgsOne = () => {
   </Row>
 };
 
-export default OrgsOne;
+export default OtdelOne;
