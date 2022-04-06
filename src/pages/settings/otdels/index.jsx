@@ -19,7 +19,7 @@ const OtdelsList = () => {
   const dispatch = useDispatch();
 
   const handleDelete = (item) => {
-    Delete(`/organization?id=${item.id}`).then((result) => {
+    Delete(`/otdels?id=${item.id}`).then((result) => {
       message.success(`Организация "${item.name}" удалена`);
       getData();
     });

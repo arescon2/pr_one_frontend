@@ -7,12 +7,13 @@ import _ from 'lodash';
 
 import { Get, Post, Put } from '../../../features/api';
 import { setOrgsForm } from '../../../features/stores/orgsSlice';
-import TextArea from 'antd/lib/input/TextArea';
-
+import SelectApi from '../../../features/comps/selectApi';
 
 const OtdelOne = () => {
   const navigate = useNavigate();
   const { pagename, id } = useParams();
+
+  const { user } = useSelector((state) => state.main)
 
   const updMode = (id !== 'new') ? true : false;
 
@@ -63,7 +64,9 @@ const OtdelOne = () => {
     };
 
     return () => isMounted = false;
-  }, [])
+  }, []);
+
+  const isDevelop = user.roles.some( uRole => _.includes('DEVELOP', uRole.name));
 
   return <Row >
     <Col md={24}>
@@ -114,6 +117,21 @@ const OtdelOne = () => {
                     </Col>
                   </Row>
                 </Col>
+                {
+                  isDevelop && <Col md={12}>
+                    <Row gutter={12}>
+                      <Col span={24}>
+                        <Form.Item
+                          name='organization'
+                          label='Организация'
+                          required
+                        >
+                          <SelectApi type='organization' />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Col>
+                }
               </Row>
               <Col span={24}>
                 <Divider />
