@@ -5,7 +5,7 @@ import { Get, Post } from "../../api";
 
 const { Search } = Input;
 
-const DicPosts = ({ value, onChange }) => {
+const DicPosts = ({ value, onChange, initial = false }) => {
   const [ dataList, setDataList ] = useState([]);
   const [ count, setCount ] = useState(0);
   
@@ -52,8 +52,8 @@ const DicPosts = ({ value, onChange }) => {
   }
 
   useEffect(() => {
-    value ? getData(true) : null;
-  }, [value]);
+    (value || initial) ? getData(value ? true : false) : null;
+  }, [value, initial]);
   
   return <>
     <Tooltip placement='bottomLeft' title={selected.name}>

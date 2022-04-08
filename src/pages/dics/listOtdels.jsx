@@ -6,7 +6,7 @@ import { Post } from "../../features/api";
 import SelectApi from "../../features/comps/selectApi";
 import ListFieldsForDicApp from "./listFields";
 
-const ListOtdelsForDicApp = ({ list = [] }, setRefresh) => {
+const ListOtdelsForDicApp = ({ list = [], setRefresh }) => {
   const [employeeForm] = useForm();
 
   const [idOtdel, setIdOtdel] = useState(null);
@@ -20,8 +20,11 @@ const ListOtdelsForDicApp = ({ list = [] }, setRefresh) => {
   const handleOk = () => {
     const values = employeeForm.getFieldsValue();
 
-    Post('/employee', values).then((res) => {
+    values.otdel = idOtdel;
+
+    Post('/employes', values).then((res) => {
       message.success('Сотрудник добавлен');
+      setRefresh(true);
       handleCloseModal();
     }).catch(error => {
       message.error('Ошибка: ' + error.message)
@@ -61,32 +64,59 @@ const ListOtdelsForDicApp = ({ list = [] }, setRefresh) => {
             wrapperCol={{ span: 16 }}
           >
               <Form.Item
-                name='fio'
-                label='ФИО'
+                name='fam'
+                label='Фамилия'
                 required
               >
                 <Input />
               </Form.Item>
               <Form.Item
-                name='post'
+                name='im'
+                label='Имя'
+                required
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name='otch'
+                label='Отчество'
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name='position'
                 label='Должность'
                 required
               >
                 <SelectApi type='posts' />
               </Form.Item>
               <Form.Item
-                name='phone'
+                name='mobile'
                 label='Мобильный телефон'
+                extra='Ввод без кода страны. Пример: 9133333333'
+                rules={[
+                  {
+                    pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+                    message: 'Есть символы не соответствующие мобильному номеру'
+                  }
+                ]}
                 required
               >
-                <Input />
+                <Input type='tel' maxLength={10} />
               </Form.Item>
               <Form.Item
-                name='workphone'
+                name='worktel'
                 label='Рабочий телефон'
+                extra='Ввод без кода страны. Пример: 9133333333'
+                rules={[
+                  {
+                    pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+                    message: 'Есть символы не соответствующие мобильному номеру'
+                  }
+                ]}
                 required
               >
-                <Input />
+                <Input type='tel' maxLength={10} />
               </Form.Item>
           </Form>
         </Col>

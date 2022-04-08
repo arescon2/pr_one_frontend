@@ -1,29 +1,30 @@
-import { Col, Divider, Row, Table, Tooltip, Typography } from "antd";
-import { nanoid } from "nanoid";
-import DataTable from "react-data-table-component";
+import { Col, Row, Table } from "antd";
 
 const ListFieldsForDicApp = ({ list = [{}] }) => {
   const columns = [
     {
       title: '#',
       dataIndex: 'id',
+      render: (text, record, index) => index + 1
     },
     {
       title: 'ФИО',
       dataIndex: 'fio',
       width: '300px',
+      render: (text, record) => `${record.fam} ${record.im} ${record.otch || ''}`
     },
     {
       title: 'Должность',
-      dataIndex: 'post'
+      dataIndex: 'position',
+      render: (position) => position.name
     },
     {
       title: 'Мобильный телефон',
-      dataIndex: 'phone'
+      dataIndex: 'mobile'
     },
     {
       title: 'Рабочий телефон',
-      dataIndex: 'workphone'
+      dataIndex: 'worktel'
     },
   ];
 
