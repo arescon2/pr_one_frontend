@@ -1,4 +1,4 @@
-import { Button, Col, Collapse, Form, Input, Layout, PageHeader, Row, Typography } from "antd";
+import { Button, Col, Collapse, Form, Input, Layout, PageHeader, Row, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Delete, Get } from '../../features/api';
@@ -34,6 +34,22 @@ const DicsApp = () => {
     setRefresh(true);
   }
 
+  const handleChangeOrg = (ev) => {
+    filterForm.setFieldsValue({
+      organization: ev.target.value,
+      myorg: false
+    });
+  }
+
+  const handleChangeMyOrg = (value) => {
+    if (value) {
+      filterForm.setFieldsValue({
+        organization: undefined,
+        myorg: value
+      });
+    }
+  }
+
   return <Layout className='wrapper'>
     <Typography.Title level={4}></Typography.Title>
     <PageHeader
@@ -59,6 +75,22 @@ const DicsApp = () => {
                     label="Организация"
                     name="organization"
                   >
+                    <Input onChange={handleChangeOrg} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Моя организация"
+                    name="myorg"
+                  >
+                    <Switch onChange={handleChangeMyOrg} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="ФИО"
+                    name="fio"
+                  >
                     <Input />
                   </Form.Item>
                 </Col>
@@ -68,14 +100,6 @@ const DicsApp = () => {
                     name="position"
                   >
                     <SelectApi type='posts' initial />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="ФИО"
-                    name="fio"
-                  >
-                    <Input />
                   </Form.Item>
                 </Col>
                 <Col span={24}>

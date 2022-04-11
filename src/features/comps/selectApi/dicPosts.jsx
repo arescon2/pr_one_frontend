@@ -57,7 +57,7 @@ const DicPosts = ({ value, onChange, initial = false }) => {
   
   return <>
     <Tooltip placement='bottomLeft' title={selected.name}>
-      <Search onSearch={onOpen} value={selected.name} placeholder="Выберите должность" />
+      <Search onSearch={onOpen} readOnly value={selected.name} placeholder="Выберите должность" />
     </Tooltip>
     <Modal title="Выбор должности" visible={isOpenModal} onCancel={onCloseModal} footer={false}>
       <label>Введите название должности</label>
