@@ -35,9 +35,11 @@ const DicsApp = () => {
   }
 
   const handleChangeOrg = (ev) => {
+    const values = filterForm.getFieldsValue();
+    console.log(values)
     filterForm.setFieldsValue({
       organization: ev.target.value,
-      myorg: false
+      myorg: undefined
     });
   }
 
@@ -82,6 +84,7 @@ const DicsApp = () => {
                   <Form.Item
                     label="Моя организация"
                     name="myorg"
+                    valuePropName="checked"
                   >
                     <Switch onChange={handleChangeMyOrg} />
                   </Form.Item>

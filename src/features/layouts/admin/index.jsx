@@ -3,8 +3,7 @@ import { Helmet } from 'react-helmet';
 
 import { Layout, Row } from 'antd';
 
-import Header from '../../header';
-import Footer from '../../footer';
+import HeaderBlock from '../../header';
 
 import LeftBlock from './leftBlock';
 
@@ -19,7 +18,7 @@ const Home = (props) => {
     </Helmet>
     <LeftBlock key={nanoid()} />
     <div key={nanoid()} className='card-root-block'>
-      <Header />
+      <HeaderBlock />
       <Layout.Content className='body-block'>
         {props.children}
       </Layout.Content>

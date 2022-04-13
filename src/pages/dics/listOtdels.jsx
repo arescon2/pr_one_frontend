@@ -2,18 +2,34 @@ import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import { Post } from "../../features/api";
+import { useSelector } from "react-redux";
+
+import _ from 'lodash';
+
+import { Post, Put } from "../../features/api";
 import SelectApi from "../../features/comps/selectApi";
 import ListFieldsForDicApp from "./listFields";
 
-const ListOtdelsForDicApp = ({ list = [], setRefresh }) => {
+const ListOtdelsForDicApp = ({ list = [], organization, setRefresh }) => {
   const [employeeForm] = useForm();
+
+  const user = useSelector(state => state.main.user);
+
+  const isDevelop = user.roles.some( uRole => _.includes('DEVELOP', uRole.name));
+  const isMyOrg = (user.person.organization.uid === organization.uid);
 
   const [idOtdel, setIdOtdel] = useState(null);
   const [employee, setEmployee] = useState({});
 
   const handleCloseModal = () => {
     setIdOtdel(null);
+    setEmployee({})
+    employeeForm.resetFields();
+  }
+
+  const handleUpdPerson = (id_otdel, person) => {
+    setEmployee(person);
+    setIdOtdel(id_otdel);
     employeeForm.resetFields();
   }
 
@@ -22,25 +38,40 @@ const ListOtdelsForDicApp = ({ list = [], setRefresh }) => {
 
     values.otdel = idOtdel;
 
-    Post('/employes', values).then((res) => {
-      message.success('Сотрудник добавлен');
-      setRefresh(true);
-      handleCloseModal();
-    }).catch(error => {
-      message.error('Ошибка: ' + error.message)
-    });
+    if (employee.id) {
+      Put('/employes?id=' + employee.id, values).then((res) => {
+        message.success('Сотрудник обновлен');
+        setRefresh(true);
+        handleCloseModal();
+      }).catch(error => {
+        message.error('Ошибка: ' + error.message)
+      });
+    } else {
+      Post('/employes', values).then((res) => {
+        message.success('Сотрудник добавлен');
+        setRefresh(true);
+        handleCloseModal();
+      }).catch(error => {
+        message.error('Ошибка: ' + error.message)
+      });
+    }
   }
 
   return <>
     {
       list.map((otdel) => {
-        return <Row key={nanoid()} justify="center">
+        return <Row key={nanoid()} style={{ margin: '0 5px' }} justify="center">
           <Col span={24} >
-            <p style={{ textAlign: 'center', textDecoration: 'underline' }}>{otdel.name}</p>
-            <Button style={{ float: 'right' }} size='small' type='primary' onClick={() => setIdOtdel(otdel.id)}>Добавить сотрудника</Button>
+            <p></p>
+            <span style={{ marginLeft: '15px', textDecoration: 'underline' }}>{otdel.name}</span>
+            {
+              isDevelop || isMyOrg ?
+                <Button style={{ float: 'right' }} size='small' type='primary' onClick={() => setIdOtdel(otdel.id)}>Добавить сотрудника</Button>
+                : null
+            }
           </Col>
           <Col span={24}>
-            <ListFieldsForDicApp list={otdel.fields} />
+            <ListFieldsForDicApp organization={organization} list={otdel.fields} handleUpdPerson={handleUpdPerson} id_otdel={otdel.id} />
           </Col>
         </Row>
       })
@@ -52,6 +83,7 @@ const ListOtdelsForDicApp = ({ list = [], setRefresh }) => {
       onOk={handleOk}
       footer={<>
         <Button type='primary' onClick={handleOk}>Сохранить</Button>
+        <Button onClick={handleCloseModal}>Отменить</Button>
       </>}
     >
       <Row>

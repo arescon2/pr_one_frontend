@@ -10,7 +10,7 @@ import { faUserCog, faPlus, faBell, faSignOutAlt } from '@fortawesome/free-solid
 import { setLogined, setLoading } from '../stores/mainSlice';
 import { Post } from '../api';
 
-const Header = () => {
+const HeaderBlock = () => {
   const { pageTitle } = useSelector((state) => state.main);
   
   const navigate = useNavigate();
@@ -42,4 +42,4 @@ const Header = () => {
   )
 }
 
-export default Header;
+export default HeaderBlock;

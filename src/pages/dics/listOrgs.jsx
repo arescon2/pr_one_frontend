@@ -14,7 +14,7 @@ const ListOrgsForDicApp = ({ list = [], setRefresh }) => {
         <p style={{ textAlign: 'center', color: '#979797' }}>{subTitle}</p>
       </Col>
       <Col span={24}>
-        <ListOtdelsForDicApp list={org.otdels} setRefresh={setRefresh} />
+        <ListOtdelsForDicApp list={org.otdels} setRefresh={setRefresh} organization={org} />
       </Col>
     </Row>
   })

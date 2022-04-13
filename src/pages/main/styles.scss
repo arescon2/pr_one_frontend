@@ -1,3 +1,10 @@
+/* Color Theme Swatches in Hex */
+$theme1-dark: #033E8C;
+$theme1-dark-ligth: #034C8C;
+$theme1-ligth: #05C7F2;
+$theme1-yellow: #F2CB05;
+$theme1-grey: #F2F2F2;
+
 .item-apps {
   width: 400px;
   float: left;
@@ -17,4 +24,8 @@
   &.danger {
     background-color: #7c05052e;
   }
+}
+
+.main-page {
+  margin-top: 10px;
 }
