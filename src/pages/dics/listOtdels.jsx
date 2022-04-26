@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, message, Modal, Row } from "antd";
+import { Button, Col, Divider, Form, Input, message, Modal, Row } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { nanoid } from "nanoid";
 import { useState } from "react";
@@ -71,7 +71,7 @@ const ListOtdelsForDicApp = ({ list = [], organization, setRefresh }) => {
             }
           </Col>
           <Col span={24}>
-            <ListFieldsForDicApp organization={organization} list={otdel.fields} handleUpdPerson={handleUpdPerson} id_otdel={otdel.id} />
+            <ListFieldsForDicApp organization={organization} list={otdel.fields} setRefresh={setRefresh} handleUpdPerson={handleUpdPerson} id_otdel={otdel.id} />
           </Col>
         </Row>
       })
@@ -149,6 +149,14 @@ const ListOtdelsForDicApp = ({ list = [], organization, setRefresh }) => {
                 required
               >
                 <Input type='tel' maxLength={10} />
+              </Form.Item>
+              <Divider />
+              <Form.Item
+                name='otdel'
+                label='Отдел'
+                required
+              >
+                <SelectApi type='otdels' organization={organization} />
               </Form.Item>
           </Form>
         </Col>

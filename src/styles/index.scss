@@ -91,3 +91,24 @@ code {
   background-color: #1890ff;
   color: white;
 }
+
+.tickets-menu {
+  width: 170px;
+  float: left;
+  position: absolute;
+}
+
+.wrapper-tickets {
+  background-color: white;
+  margin-left: 170px;
+  float: right;
+  padding: 0 10px;
+}
+
+.wrapper-main {
+  background-color: white;
+}
+
+.ant-page-header-heading-extra {
+  margin-top: 10px;
+}

@@ -6,8 +6,9 @@ import _ from 'lodash';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useSelector } from "react-redux";
+import { Delete } from "../../features/api";
 
-const ListFieldsForDicApp = ({ list = [{}], organization, handleUpdPerson, id_otdel }) => {
+const ListFieldsForDicApp = ({ list = [{}], organization, handleUpdPerson, id_otdel, setRefresh }) => {
   const user = useSelector(state => state.main.user);
 
   const handleUpdField = (person) => {
@@ -18,7 +19,9 @@ const ListFieldsForDicApp = ({ list = [{}], organization, handleUpdPerson, id_ot
   const isMyOrg = (user.person.organization.uid === organization.uid);
 
   const handleDelField = (person) => {
-    console.log(person)
+    Delete('/employes?id=' + person.id).then(res => {
+      setRefresh(true);
+    });
   }
 
   const columns = [
@@ -78,7 +81,7 @@ const ListFieldsForDicApp = ({ list = [{}], organization, handleUpdPerson, id_ot
         return isDevelop || isMyOrg ?
           [
             <Button size="small" icon={<EditOutlined/>} key={nanoid()} type='primary' onClick={() => handleUpdField(record)} ></Button>,
-            <Popconfirm key={nanoid()} placement="topLeft" title='Подтвердите удаление' onConfirm={handleDelField(record)} okText="Да" cancelText="Нет">
+            <Popconfirm key={nanoid()} placement="topLeft" title='Подтвердите удаление' onConfirm={() => handleDelField(record)} okText="Да" cancelText="Нет">
               <Button size="small" icon={<DeleteOutlined />}  type="danger" ></Button>
             </Popconfirm>
           ] : null;

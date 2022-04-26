@@ -33,7 +33,7 @@ const LeftBlock = () => {
       title: 'Тикеты',
       placeholder: 'Тикеты',
       roles: ['DEVELOP'],
-      link: '/page/tickets'
+      link: '/tickets'
     },
     {
       id: 999,
@@ -70,7 +70,6 @@ const LeftBlock = () => {
     <Menu
       className='root-menu'
       defaultSelectedKeys={['1']}
-      defaultOpenKeys={['sub1']}
       mode="vertical"
     >
       { MenuItemsCreator() }

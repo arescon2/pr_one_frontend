@@ -53,7 +53,6 @@ const DicsApp = () => {
   }
 
   return <Layout className='wrapper'>
-    <Typography.Title level={4}></Typography.Title>
     <PageHeader
       ghost={false}
       style={{ padding: 0 }}
