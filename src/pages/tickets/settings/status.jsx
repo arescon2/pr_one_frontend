@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, PageHeader, Popover, Row, Form, Modal, Input, Tooltip } from "antd";
+import { Button, Col, PageHeader, Popover, Row, Form, Modal, Input, Tooltip, Badge, Tag, Switch } from "antd";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Delete, Get, Post, Put } from "../../../features/api";
-
+import ColorPicker from "../../../features/comps/colorPicker";
 
 const TicketStatus = () => {
   const [form] = Form.useForm();
@@ -21,14 +21,28 @@ const TicketStatus = () => {
       width: '80px'
     },
     {
+      name: 'Начальный',
+      selector: row => row.main ? <Tag color='green'>Да</Tag> : '',
+      width: '100px'
+    },
+    {
       name: 'Название',
       selector: row => <Tooltip placement="topLeft" title={row.name}>{row.name}</Tooltip>,
-      width: '200px',
+    },
+    {
+      name: 'Код',
+      selector: row => <Tooltip placement="topLeft" title={row.code}>{row.code}</Tooltip>,
+    },
+    {
+      name: 'Цвет',
+      selector: row => <Tag color={row.color}>{row.color}</Tag>,
+      width: '100px',
     },
     {
       name: 'Действия',
       cell: (item) => {
         return <>
+          <Button type='primary' ghost placeholder='Изменить' icon={<FontAwesomeIcon icon='edit' />} onClick={() => handleOpenForm(item)} size='small'></Button>
           <Popover
             placement='leftBottom'
             trigger='click'
@@ -38,6 +52,7 @@ const TicketStatus = () => {
           </Popover>
         </>
       },
+      width: '90px',
       ignoreRowClick: true,
       right: true
     }
@@ -62,11 +77,20 @@ const TicketStatus = () => {
 
   const handleSend = () => {
     let values = form.getFieldsValue();
-    Post(url, values).then((res) => {
-      let _list = [...list, res];
-      setList(_list);
-      handleCloseForm();
-    });
+    if (oneEdit.id) {
+      Put(`${url}?id=${oneEdit.id}`, values).then((res) => {
+        let _list = list.map((el) => el.id === res.id ? Object.assign(el, values) : el);
+
+        setList(_list);
+        handleCloseForm();
+      });
+    } else {
+      Post(url, values).then((res) => {
+        let _list = [...list, res];
+        setList(_list);
+        handleCloseForm();
+      });
+    }
   }
 
   const handleDelete = (item) => {
@@ -91,13 +115,13 @@ const TicketStatus = () => {
       <PageHeader
         ghost={false}
         style={{ padding: 0 }}
-        title="Настройки"
-        subTitle="Статусы"
+        title="Статусы обращений"
+        subTitle="Настройка статусов обращений"
         extra={[
           <Button
-            icon={<FontAwesomeIcon icon='plus' />} type='primary'
-            ghost size='small' onClick={() => handleOpenForm()}
-          >Статус</Button>
+            type='primary'
+            ghost size='small' onClick={handleOpenForm}
+          >Добавить</Button>
         ]}
       />
       <DataTable
@@ -117,13 +141,26 @@ const TicketStatus = () => {
         form={form}
         initialValues={oneEdit}
         onFinish={handleSend}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
       >
         <Row>
           <Col span={24}>
             <Form.Item name='name' label='Название'>
               <Input />
             </Form.Item>
+            <Form.Item name='code' label='Код'>
+              <Input />
+            </Form.Item>
+            <Form.Item name='color' label='Цвет'>
+              <ColorPicker />
+            </Form.Item>
+            <Form.Item name='main' label='Начальный'>
+              <Switch />
+            </Form.Item>
           </Col>
+        </Row>
+        <Row> 
           <Col span={24} style={{ textAlign: 'right' }}>
             <Button type="primary" htmlType="submit" size="small">
               Сохранить

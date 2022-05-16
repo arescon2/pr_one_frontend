@@ -107,8 +107,47 @@ code {
 
 .wrapper-main {
   background-color: white;
+  margin-bottom: 20px;
 }
 
 .ant-page-header-heading-extra {
   margin-top: 10px;
+}
+
+.user-name-label {
+  padding-right: 10px;
+}
+
+.rdt_TableRow {
+  &:hover {
+    cursor: pointer;
+    background-color: #dfdfdf;
+  }
+}
+
+.issue-head-title {
+  span {
+    color: #b1b1b1;
+  }
+}
+
+.issue-header-title {
+  color: #b1b1b1;
+}
+
+.issue-block-body {
+  float: left;
+  text-align: justify;
+  width: 100%;
+  background: #e7e7e754;
+  border-radius: 4px;
+  padding: 2px 10px;
+  min-height: 120px;
+}
+
+.issue-block-text {
+  border: 1px solid #f0f0f0;
+  margin-right: 10px;
+  min-height: 100%;
+  padding: 0 5px;
 }

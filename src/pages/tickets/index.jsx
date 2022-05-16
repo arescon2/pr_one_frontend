@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { useSelector } from "react-redux";
 import { Route, useNavigate, Routes } from "react-router-dom";
 import MainTickets from "./main";
+import OneTicket from "./oneTicket";
 import TicketCategory from "./settings/category";
 import TicketsSettingMain from "./settings/main";
 import TicketStatus from "./settings/status";
@@ -15,13 +16,20 @@ const TicketsMain = () => {
   const items = [
     {
       id: 1,
-      title: 'Обращения',
-      placeholder: 'Обращения',
+      title: 'Мои обращения',
+      placeholder: 'Мои обращения',
       roles: ['ALL'],
       link: '/tickets'
     },
     {
       id: 2,
+      title: 'Ответственные обращения',
+      placeholder: 'Ответственные обращения',
+      roles: ['ALL'],
+      link: '/tickets'
+    },
+    {
+      id: 3,
       title: 'Настройки',
       placeholder: 'Настройки',
       roles: ['DEVELOP'],
@@ -106,6 +114,7 @@ const TicketsMain = () => {
         <Route path="/settings/status" element={<TicketStatus />} />
         <Route path="/settings/category" element={<TicketCategory />} />
         <Route path="/settings/type" element={<TicketType />} />
+        <Route path="/one/:id" element={<OneTicket />} />
       </Routes>
     </Content>
   </Layout>

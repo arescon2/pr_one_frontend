@@ -11,8 +11,6 @@ import { Delete, Get } from '../../../features/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOrgsList, setOrgsForm, setOrgsPagin } from '../../../features/stores/orgsSlice';
 
-import Paragraph from 'antd/lib/typography/Paragraph';
-
 const OrgsList = () => {
   const { pagename, id } = useParams();
   const navigate = useNavigate();
@@ -118,7 +116,7 @@ const OrgsList = () => {
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Новая организация</Button>,
+            <Button type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Добавить</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />

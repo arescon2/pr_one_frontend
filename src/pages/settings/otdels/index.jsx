@@ -104,7 +104,7 @@ const OtdelsList = () => {
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Новый отдел</Button>,
+            <Button type='primary' ghost size='small' onClick={() => handleOpenForm('new')}>Добавить</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />

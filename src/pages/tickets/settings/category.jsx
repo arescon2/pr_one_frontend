@@ -91,13 +91,13 @@ const TicketCategory = () => {
       <PageHeader
         ghost={false}
         style={{ padding: 0 }}
-        title="Настройки"
+        title="Категории обращений"
         subTitle="Категории"
         extra={[
           <Button
-            icon={<FontAwesomeIcon icon='plus' />} type='primary'
-            ghost size='small' onClick={() => handleOpenForm()}
-          >Категория</Button>
+            type='primary'
+            ghost size='small' onClick={handleOpenForm}
+          >Добавить</Button>
         ]}
       />
       <DataTable

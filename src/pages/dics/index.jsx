@@ -36,7 +36,6 @@ const DicsApp = () => {
 
   const handleChangeOrg = (ev) => {
     const values = filterForm.getFieldsValue();
-    console.log(values)
     filterForm.setFieldsValue({
       organization: ev.target.value,
       myorg: undefined
@@ -60,7 +59,7 @@ const DicsApp = () => {
     />
     <Row style={{ marginBottom: '10px' }}>
       <Col span={24}>
-        <Collapse >
+        <Collapse ghost >
           <Collapse.Panel key='filters' header='Фильтры'>
             <Form
               form={filterForm}

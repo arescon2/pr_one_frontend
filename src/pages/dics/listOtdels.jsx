@@ -150,14 +150,14 @@ const ListOtdelsForDicApp = ({ list = [], organization, setRefresh }) => {
               >
                 <Input type='tel' maxLength={10} />
               </Form.Item>
-              <Divider />
+              {/* <Divider />
               <Form.Item
                 name='otdel'
                 label='Отдел'
                 required
               >
                 <SelectApi type='otdels' organization={organization} />
-              </Form.Item>
+              </Form.Item> */}
           </Form>
         </Col>
       </Row>

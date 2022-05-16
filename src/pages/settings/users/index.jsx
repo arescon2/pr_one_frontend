@@ -117,7 +117,7 @@ const UserList = () => {
           subTitle='Список'
           ghost={false}
           extra={[
-            <Button icon={<FontAwesomeIcon icon='plus' />} type='primary' ghost size='small' onClick={() => handleOpenForm()}>Новый пользователь</Button>,
+            <Button type='primary' ghost size='small' onClick={() => handleOpenForm()}>Добавить</Button>,
             <Button icon={<FontAwesomeIcon icon='sync' />} type='primary' ghost size='small' onClick={handleRefresh}> </Button>
           ]}
         />

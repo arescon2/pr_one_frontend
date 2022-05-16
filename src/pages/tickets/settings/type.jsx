@@ -91,13 +91,13 @@ const TicketType = () => {
       <PageHeader
         ghost={false}
         style={{ padding: 0 }}
-        title="Настройки"
-        subTitle="Типы"
+        title="Типы обращений"
+        subTitle="Тип поступающих обращений"
         extra={[
           <Button
-            icon={<FontAwesomeIcon icon='plus' />} type='primary'
-            ghost size='small' onClick={() => handleOpenForm()}
-          >Тип</Button>
+            type='primary'
+            ghost size='small' onClick={handleOpenForm}
+          >Добавить</Button>
         ]}
       />
       <DataTable

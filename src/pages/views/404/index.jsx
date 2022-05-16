@@ -1,5 +1,5 @@
 import { Button, Col, Empty, Row } from 'antd';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import './style.scss';
 

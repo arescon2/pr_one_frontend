@@ -11,7 +11,7 @@ import { setLogined, setLoading } from '../stores/mainSlice';
 import { Post } from '../api';
 
 const HeaderBlock = () => {
-  const { pageTitle } = useSelector((state) => state.main);
+  const { user } = useSelector((state) => state.main);
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,6 +33,7 @@ const HeaderBlock = () => {
     <div className='header-block'>
       <Button onClick={handleAdd} icon={<FontAwesomeIcon icon={faPlus} />} type='text' ></Button>
       <div className='user-block'>
+        <label className='user-name-label'>{`${user.person.fam} ${user.person.im}`}</label>
         <Button icon={<FontAwesomeIcon icon={faUserCog} />} type='text' onClick={handleGoCabinet} ></Button>
         <Button icon={<FontAwesomeIcon icon={faBell} />} type='text' ></Button>
         <Divider type='vertical'/>
